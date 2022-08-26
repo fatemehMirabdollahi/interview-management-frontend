@@ -2,12 +2,14 @@
   <router-view />
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-</style>
+<script>
+import variables from "./assets/scss/_export.module.scss";
+
+export default {
+  setup() {
+    console.log(variables);
+  },
+};
+</script>
+
+<style></style>
