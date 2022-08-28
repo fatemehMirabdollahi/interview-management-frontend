@@ -1,0 +1,12 @@
+$font-size: (
+  "s": 12px,
+  "m": 14px,
+  "l": 16px,
+  "lg": 18px,
+  "xl": 20px,
+  "xxl": 24px,
+);
+
+@function fontSize($size) {
+  @return map-get($map: $font-size, $key: $size);
+}

@@ -1,6 +1,14 @@
 const FixStyleOnlyEntriesPlugin = require("webpack-fix-style-only-entries");
+const stylesPath = "@/assets/scss";
 
 module.exports = {
+  css: {
+    loaderOptions: {
+      scss: {
+        additionalData: `@use "sass:math"; @use "${stylesPath}/prepend.scss" as *;`,
+      },
+    },
+  },
   configureWebpack: {
     plugins: [new FixStyleOnlyEntriesPlugin()],
     entry: {
