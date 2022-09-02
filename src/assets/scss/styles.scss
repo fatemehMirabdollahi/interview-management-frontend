@@ -88,6 +88,18 @@ div::-webkit-scrollbar {
 .i-flex-justify-center {
   justify-content: center;
 }
+.i-flex-justify-around {
+  justify-content: space-around;
+}
+.i-flex-justify-between {
+  justify-content: space-between;
+}
+.i-flex-justify-even {
+  justify-content: space-evenly;
+}
+.i-flex-justify-center {
+  justify-content: center;
+}
 .i-flex-justify-start {
   justify-content: start;
 }
@@ -101,4 +113,7 @@ div::-webkit-scrollbar {
 
 .i-flex-align-end {
   align-items: flex-end;
+}
+.i-flex-1 {
+  flex: 1 0 auto;
 }

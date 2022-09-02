@@ -1,6 +1,7 @@
 <template>
   <div
     class="i-flex-1 i-flex-column field__body"
+    :class="theme == 'light' ? 'field__body--light' : ''"
     :style="{ opacity: disabled ? '0.5' : '1' }"
   >
     <span class="field__label">{{ label }} :</span>
@@ -15,7 +16,9 @@
         :readonly="readOnly"
         :placeholder="placeholder"
         class="input"
-        :class="[{ 'input-selected': selected }]"
+        :class="[
+          { 'input-selected': selected, 'input--light': theme == 'light' },
+        ]"
       />
     </div>
   </div>
@@ -46,6 +49,9 @@ export default {
       type: String,
     },
     label: {
+      type: String,
+    },
+    theme: {
       type: String,
     },
   },
@@ -83,6 +89,11 @@ $field-height: 40px;
     border: 2px solid var(--highlight-color);
     box-shadow: var(--highlight-color) 1.95px 1.95px 2.6px;
   }
+  &--light {
+    background: var(--on-color-3);
+    color: var(--color-3);
+    
+  }
 }
 .field {
   &__body {
@@ -96,6 +107,12 @@ $field-height: 40px;
     font-size: fontSize("l");
     margin-bottom: 15px;
     color: var(--on-color-1);
+  }
+  &--light {
+    color: var(--color-3);
+    &__label {
+      color: var(--color-1);
+    }
   }
 }
 </style>
