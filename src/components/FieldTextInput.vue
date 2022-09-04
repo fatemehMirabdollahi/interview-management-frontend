@@ -4,7 +4,7 @@
     :class="theme == 'light' ? 'field__body--light' : ''"
     :style="{ opacity: disabled ? '0.5' : '1' }"
   >
-    <span class="field__label">{{ label }} :</span>
+    <span v-if="label" class="field__label">{{ label }} :</span>
     <div class="i-flex field">
       <input
         :value="modelValue"
@@ -85,6 +85,10 @@ $field-height: 40px;
     border: 2px solid var(--highlight-color);
     box-shadow: var(--highlight-color) 1.95px 1.95px 2.6px;
   }
+  &:hover {
+    border: 2px solid var(--highlight-color);
+    box-shadow: var(--highlight-color) 1.95px 1.95px 2.6px;
+  }
   &-selected {
     border: 2px solid var(--highlight-color);
     box-shadow: var(--highlight-color) 1.95px 1.95px 2.6px;
@@ -92,12 +96,26 @@ $field-height: 40px;
   &--light {
     background: var(--on-color-3);
     color: var(--color-3);
-    
+    &:focus {
+      // border: 2px solid var(--highlight-light-color);
+      box-shadow: var(--highlight-light-color) 1.95px 1.95px 2.6px;
+      border: none;
+    }
+    &:hover {
+      // border: 2px solid var(--highlight-light-color);
+      box-shadow: var(--highlight-light-color) 1.95px 1.95px 2.6px;
+      border: none;
+    }
   }
 }
 .field {
   &__body {
     min-height: 40px;
+    &--light {
+      .field__label {
+        color: var(--on-color-3);
+      }
+    }
   }
   position: relative;
   text-align: center;
@@ -110,9 +128,6 @@ $field-height: 40px;
   }
   &--light {
     color: var(--color-3);
-    &__label {
-      color: var(--color-1);
-    }
   }
 }
 </style>

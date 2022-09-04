@@ -8,6 +8,7 @@
   --color-3: #{light.$color_3};
   --on-color-3: #{light.$on_color_3};
   --highlight-color: #{light.$highlight};
+  --highlight-light-color: #{light.$highlight_light};
 }
 
 [theme="light"] {
@@ -18,6 +19,7 @@
   --color-3: #{light.$color_3};
   --on-color-3: #{light.$on_color_3};
   --highlight-color: #{light.$highlight};
+  --highlight-light-color: #{light.$highlight_light};
 }
 
 html {

@@ -16,7 +16,8 @@
     "vue-class-component": "^8.0.0-0",
     "vue-router": "^4.0.0-alpha.6",
     "vue-use-sound": "^1.1.1",
-    "vuex": "^4.0.0-alpha.1"
+    "vuex": "^4.0.0-alpha.1",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.13",
