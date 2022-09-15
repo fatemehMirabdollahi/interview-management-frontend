@@ -13,15 +13,15 @@
     </div>
     <div class="addYear__table i-flex-column">
       <div class="addYear__table__row addYear__table__row--header i-flex">
-        <div class="i-flex i-flex-align-center" style="flex: 1"></div>
-        <div class="i-flex i-flex-align-center" style="flex: 4">سال</div>
-        <div class="i-flex i-flex-align-center" style="flex: 3">
+        <div class="i-flex i-flex-align-center" style="flex: 2"></div>
+        <div class="i-flex i-flex-align-center" style="flex: 5">سال</div>
+        <div class="i-flex i-flex-align-center" style="flex: 4">
           تعداد متقاضیان
         </div>
-        <div class="i-flex i-flex-align-center" style="flex: 3">
+        <div class="i-flex i-flex-align-center" style="flex: 4">
           مصاحبه شده ها
         </div>
-        <div class="i-flex i-flex-align-center" style="flex: 3">
+        <div class="i-flex i-flex-align-center" style="flex: 4">
           تعداد قبولی ها
         </div>
         <div class="i-flex i-flex-align-center" style="flex: 1"></div>
@@ -31,81 +31,101 @@
         v-for="(row, index) in yearData"
         :key="index"
       >
-        <div class="i-flex i-flex-align-center" style="flex: 1">
+        <div class="i-flex i-flex-align-center" style="flex: 2">
           {{ index + 1 }}
         </div>
-        <div class="i-flex i-flex-align-center" style="flex: 4">
+        <div class="i-flex i-flex-align-center" style="flex: 5">
           {{ row.year }}
         </div>
-        <div class="i-flex i-flex-align-center" style="flex: 3">
+        <div class="i-flex i-flex-align-center" style="flex: 4">
           {{ row.requests }}
         </div>
-        <div class="i-flex i-flex-align-center" style="flex: 3">
+        <div class="i-flex i-flex-align-center" style="flex: 4">
           {{ row.interviewed }}
         </div>
-        <div class="i-flex i-flex-align-center" style="flex: 3">
+        <div class="i-flex i-flex-align-center" style="flex: 4">
           {{ row.accepts }}
         </div>
-        <div class="i-flex i-flex-align-center" style="flex: 1">
+        <div
+          class="i-flex i-flex-align-center i-flex-justify-between"
+          style="flex: 1"
+        >
           <img
+            class="addYear__table-icon"
             src="../assets/images/delete.svg"
             alt=""
-            srcset=""
-            style="width: 20px"
+            @click="selectDelete(row.year)"
           />
           <img
+            class="addYear__table-icon"
             src="../assets/images/edit.svg"
             alt=""
-            srcset=""
-            style="width: 20px"
+            @click="editUploaded(row)"
           />
         </div>
       </div>
     </div>
   </div>
-  <modal-window v-if="uploadForm" @esc="uploadForm = false">
-    <div class="upload i-flex-column">
-      <div class="i-flex i-flex-justify-between upload__header">
-        <span class="upload__header-title">اضافه کردن سال تحصیلی جدید</span>
-        <img
-          class="upload__header-close"
-          src="../assets/images/close.svg"
-          alt=""
-          @click="uploadForm = false"
-        />
-      </div>
+  <modal-window v-if="uploadForm" @esc="cancel" title="اضافه کردن مصاحبه جدید">
+    <div class="upload i-flex-column i-flex-justify-between">
       <div class="i-flex-column i-flex-align-center upload__content">
-        <field-text-input theme="light" class="upload__input" label="نام" />
+        <field-text-input theme="light" class="upload__input" label="سال" />
         <div class="upload__name i-flex i-flex-justify-between">
           <div>
             <span>کنکور:</span>
             <span>{{ filesName["konkur"] }}</span>
           </div>
-          <label
-            class="upload__button i-flex i-flex-justify-center"
-            for="file-input"
-          >
-            <img
-              class="upload__button__icon"
-              src="../assets/images/upload.svg"
-              alt=""
-            />
-          </label>
+          <div class="i-flex">
+            <label
+              class="upload__button upload__button-delete i-flex i-flex-justify-center"
+              v-if="filesName['konkur']"
+            >
+              <img
+                class="upload__button-delete-icon"
+                src="../assets/images/delete.svg"
+                alt=""
+                @click="deleteUploaded('konkur')"
+              />
+            </label>
+            <label
+              class="upload__button i-flex i-flex-justify-center"
+              for="file-input"
+            >
+              <img
+                class="upload__button__icon"
+                src="../assets/images/upload.svg"
+                alt=""
+              />
+            </label>
+          </div>
         </div>
         <div class="upload__name i-flex i-flex-justify-between">
           <div>
             <span>استعداد درخشان:</span> <span>{{ filesName["talent"] }}</span>
           </div>
-          <label
-            class="upload__button i-flex i-flex-justify-center"
-            for="file-input2"
-          >
-            <img
-              class="upload__button__icon"
-              src="../assets/images/upload.svg"
-              alt=""
-            />
-          </label>
+          <div class="i-flex">
+            <label
+              class="upload__button upload__button-delete i-flex i-flex-justify-center"
+              v-if="filesName['talent']"
+            >
+              <img
+                class="upload__button-delete-icon"
+                src="../assets/images/delete.svg"
+                alt=""
+                @click="deleteUploaded('talent')"
+              />
+            </label>
+            <label
+              class="upload__button i-flex i-flex-justify-center"
+              for="file-input2"
+            >
+              <img
+                class="upload__button__icon"
+                src="../assets/images/upload.svg"
+                alt=""
+              />
+            </label>
+          </div>
         </div>
         <div class="upload__name i-flex">
           <span>تعداد متقاضیان :</span>
@@ -131,6 +151,7 @@
           label="تایید"
           theme="light"
           :size="{ width: 120, height: 40 }"
+          @click="addInterview"
         />
         <Button
           action="secondary"
@@ -138,6 +159,26 @@
           label="انصراف"
           :size="{ width: 120, height: 40 }"
           @click="cancel"
+        />
+      </div>
+    </div>
+  </modal-window>
+  <modal-window v-if="deleteModal" @esc="deleteModal = false" title="تایید حذف">
+    <div class="delete-form i-flex-column i-flex-justify-between">
+      <span>آیا از حذف اطلاعات مصاحبه {{ selected }} اطمینان دارید؟</span>
+      <div class="delete-form__buttons i-flex i-flex-justify-between">
+        <Button
+          label="تایید"
+          theme="light"
+          :size="{ width: 120, height: 40 }"
+          @click="confirmDelete"
+        />
+        <Button
+          action="secondary"
+          theme="light"
+          label="انصراف"
+          :size="{ width: 120, height: 40 }"
+          @click="cancelDelete"
         />
       </div>
     </div>
@@ -159,27 +200,36 @@ export default {
           requests: 200,
           interviewed: 100,
           accepts: 100,
+          konkur: "کنکور",
+          talent: "استعداد",
         },
         {
           year: 1399,
           requests: 200,
           interviewed: 100,
           accepts: 100,
+          konkur: "کنکور",
+          talent: "استعداد",
         },
         {
           year: 1399,
           requests: 200,
           interviewed: 100,
           accepts: 100,
+          konkur: "کنکور",
+          talent: "استعداد",
         },
         {
           year: 1399,
           requests: 200,
           interviewed: 100,
           accepts: 100,
+          konkur: "کنکور",
+          talent: "استعداد",
         },
       ],
       uploadForm: false,
+      deleteModal: false,
       filesName: {
         konkur: "",
         talent: "",
@@ -188,6 +238,7 @@ export default {
         konkur: [],
         talent: [],
       },
+      selected: "",
     };
   },
   computed: {
@@ -203,11 +254,15 @@ export default {
     },
   },
   methods: {
+    addInterview() {
+      this.cancel();
+    },
     cancel() {
       this.uploadForm = false;
-      this.filesName["konkur"] = "";
-      this.filesName["talent"] = "";
-      this.sheetDate = [];
+      this.filesName["konkur"] = null;
+      this.filesName["talent"] = null;
+      this.sheetData["konkur"] = [];
+      this.sheetData["talent"] = [];
     },
     getExcel(event, name) {
       if (event.target.files) {
@@ -229,7 +284,6 @@ export default {
           this.sheetData[name] = [];
           for (let index = 0; index < arraylist.length; index++) {
             const element = arraylist[index];
-            console.log(element);
             this.sheetData[name].push({
               docNumber: element["شماره پرونده داوطلب"],
               number: element["شماره داوطلب"],
@@ -292,11 +346,28 @@ export default {
         };
       }
     },
+    selectDelete(name) {
+      this.selected = name;
+      this.deleteModal = true;
+    },
     submit() {
       this.uploadForm = false;
     },
-    triggerFileInput() {
-      document.getElementById("file-input").trigger("click");
+    cancelDelete() {
+      this.deleteModal = false;
+      this.selected = null;
+    },
+    confirmDelete() {
+      this.cancelDelete();
+    },
+    deleteUploaded(name) {
+      this.filesName[name] = null;
+      this.sheetData[name] = [];
+    },
+    editUploaded(year) {
+      this.uploadForm = true;
+      this.filesName["konkur"] = year.konkur;
+      this.filesName["talent"] = year.talent;
     },
   },
 };
@@ -331,7 +402,14 @@ export default {
         background-color: var(--on-color-3);
       }
       &:hover {
-        text-shadow: var(--highlight-color) 1.95px 1.95px 2.6px;
+        text-shadow: var(--highlight-color) 1px 1px 2px;
+      }
+    }
+    &-icon {
+      cursor: pointer;
+      width: 20px;
+      &:hover {
+        width: 22px;
       }
     }
   }
@@ -353,8 +431,9 @@ export default {
 }
 .upload {
   min-width: 600px;
-  min-height: 500px;
+  min-height: 370px;
   color: var(--on-color-3);
+  margin: 40px;
   &__header {
     padding: 16px 24px 16px 24px;
     border-bottom: 1px solid var(--on-color-3);
@@ -368,7 +447,6 @@ export default {
   }
   &__content {
     padding: 10px;
-    margin: 40px;
   }
   &__input {
     width: 70%;
@@ -390,16 +468,35 @@ export default {
     &:focus {
       box-shadow: var(--highlight-light-color) 1.95px 1.95px 2.6px;
     }
+    &-delete {
+      width: 30px;
+      height: 30px;
+      &-icon {
+        width: 20px;
+      }
+    }
   }
   &__name {
     width: 70%;
-    margin-top: 20px;
+    margin-top: 32px;
     & span:first-child {
       margin-left: 15px;
     }
   }
   &__buttons {
     margin: 0 25%;
+  }
+}
+.delete-form {
+  min-width: 500px;
+  min-height: 200px;
+  padding: 32px;
+  & > span {
+    font-size: 20px;
+    color: var(--on-color-3);
+  }
+  &__buttons {
+    margin: 0 15%;
   }
 }
 </style>

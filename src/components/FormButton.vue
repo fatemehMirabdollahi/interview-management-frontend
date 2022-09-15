@@ -4,7 +4,7 @@
     @click="$emit('i-click')"
     :class="[
       action == 'secondary' ? 'secondary' : 'primary',
-      { light: theme == 'light' },
+      theme == `light` ? `${action}__light` : '',
     ]"
     :style="{ width: `${size.width}px`, height: `${size.height}px` }"
   >
@@ -56,6 +56,18 @@ $border: 6px;
     border: 2px solid var(--highlight-color);
     box-shadow: var(--highlight-color) 1.95px 1.95px 2.6px;
   }
+  &__light {
+    background-color: var(--on-color-3);
+    color: var(--color-3);
+    &:focus {
+      border: none;
+      box-shadow: var(--highlight-light-color) 1.95px 1.95px 2.6px;
+    }
+    &:hover {
+      border: none;
+      box-shadow: var(--highlight-light-color) 1.95px 1.95px 2.6px;
+    }
+  }
 }
 .secondary {
   cursor: pointer;
@@ -72,19 +84,18 @@ $border: 6px;
     border: 2px solid var(--highlight-color);
     box-shadow: var(--highlight-color) 1.95px 1.95px 2.6px;
   }
-}
-.light {
-  background-color: var(--on-color-3);
-  color: var(--color-3);
-  &:focus {
-    border: none;
-    box-shadow: var(--highlight-light-color) 1.95px 1.95px 2.6px;
-  }
-  &:hover {
-    border: none;
-    box-shadow: var(--highlight-light-color) 1.95px 1.95px 2.6px;
+  &__light {
+    &:focus {
+      border: 2px solid var(--highlight-light-color);
+      box-shadow: var(--highlight-light-color) 1.95px 1.95px 2.6px;
+    }
+    &:hover {
+      border: 2px solid var(--highlight-light-color);
+      box-shadow: var(--highlight-light-color) 1.95px 1.95px 2.6px;
+    }
   }
 }
+
 .label {
   top: -2px;
   position: relative;

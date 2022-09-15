@@ -5,7 +5,16 @@
       class="i-flex i-flex-align-center i-flex-justify-center modal-backdrop"
       tabindex="-1"
     >
-      <div class="modal">
+      <div class="modal i-flex-column">
+        <div class="i-flex i-flex-justify-between modal__header">
+          <span class="modal__header-title">{{ title }}</span>
+          <img
+            class="modal__header-close"
+            src="../assets/images/close.svg"
+            alt=""
+            @click="$emit('esc')"
+          />
+        </div>
         <slot />
       </div>
     </div>
@@ -13,6 +22,11 @@
 </template>
 <script>
 export default {
+  props: {
+    title: {
+      type: String,
+    },
+  },
   data() {
     return {
       el: null,
@@ -74,5 +88,17 @@ export default {
 .modal-fade-enter-active,
 .modal-fade-leave-active {
   transition: opacity 0.5s ease;
+}
+.modal__header {
+  padding: 16px 24px 16px 24px;
+  border-bottom: 1px solid var(--on-color-3);
+  color: var(--on-color-3);
+  &-title {
+    font-size: 20px;
+  }
+  &-close {
+    width: 10px;
+    cursor: pointer;
+  }
 }
 </style>
