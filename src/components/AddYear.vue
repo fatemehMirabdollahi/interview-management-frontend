@@ -24,6 +24,7 @@
         <div class="i-flex i-flex-align-center" style="flex: 3">
           تعداد قبولی ها
         </div>
+        <div class="i-flex i-flex-align-center" style="flex: 1"></div>
       </div>
       <div
         class="addYear__table__row i-flex"
@@ -45,6 +46,20 @@
         <div class="i-flex i-flex-align-center" style="flex: 3">
           {{ row.accepts }}
         </div>
+        <div class="i-flex i-flex-align-center" style="flex: 1">
+          <img
+            src="../assets/images/delete.svg"
+            alt=""
+            srcset=""
+            style="width: 20px"
+          />
+          <img
+            src="../assets/images/edit.svg"
+            alt=""
+            srcset=""
+            style="width: 20px"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -60,8 +75,12 @@
         />
       </div>
       <div class="i-flex-column i-flex-align-center upload__content">
-        <div class="i-flex">
-          <field-text-input theme="light" class="upload__input" label="نام" />
+        <field-text-input theme="light" class="upload__input" label="نام" />
+        <div class="upload__name i-flex i-flex-justify-between">
+          <div>
+            <span>کنکور:</span>
+            <span>{{ filesName["konkur"] }}</span>
+          </div>
           <label
             class="upload__button i-flex i-flex-justify-center"
             for="file-input"
@@ -73,20 +92,38 @@
             />
           </label>
         </div>
-        <div class="upload__name i-flex">
-          <span>فایل آپلود شده :</span>
-          <span>{{ fileName }}</span>
+        <div class="upload__name i-flex i-flex-justify-between">
+          <div>
+            <span>استعداد درخشان:</span> <span>{{ filesName["talent"] }}</span>
+          </div>
+          <label
+            class="upload__button i-flex i-flex-justify-center"
+            for="file-input2"
+          >
+            <img
+              class="upload__button__icon"
+              src="../assets/images/upload.svg"
+              alt=""
+            />
+          </label>
         </div>
         <div class="upload__name i-flex">
           <span>تعداد متقاضیان :</span>
-          <span>{{ sheetData.length }}</span>
+          <span>{{ studentsNumber }}</span>
         </div>
       </div>
       <input
         type="file"
         id="file-input"
         name="file-input"
-        @change="getExcel"
+        @change="getExcel($event, 'konkur')"
+        hidden
+      />
+      <input
+        type="file"
+        id="file-input2"
+        name="file-input2"
+        @change="getExcel($event, 'talent')"
         hidden
       />
       <div class="upload__buttons i-flex i-flex-justify-between">
@@ -143,20 +180,39 @@ export default {
         },
       ],
       uploadForm: false,
-      fileName: "",
-      sheetData: [],
+      filesName: {
+        konkur: "",
+        talent: "",
+      },
+      sheetData: {
+        konkur: [],
+        talent: [],
+      },
     };
+  },
+  computed: {
+    studentsNumber() {
+      let number = 0;
+      if (this.sheetData["konkur"]) {
+        number += this.sheetData["konkur"].length;
+      }
+      if (this.sheetData["talent"]) {
+        number += this.sheetData["talent"].length;
+      }
+      return number;
+    },
   },
   methods: {
     cancel() {
       this.uploadForm = false;
-      this.fileName = "";
+      this.filesName["konkur"] = "";
+      this.filesName["talent"] = "";
       this.sheetDate = [];
     },
-    getExcel(event) {
+    getExcel(event, name) {
       if (event.target.files) {
         this.file = event.target.files[0];
-        this.fileName = this.file.name;
+        this.filesName[name] = this.file.name;
         let fileReader = new FileReader();
         fileReader.readAsArrayBuffer(this.file);
         fileReader.onload = () => {
@@ -170,36 +226,67 @@ export default {
           var first_sheet_name = workbook.SheetNames[0];
           var worksheet = workbook.Sheets[first_sheet_name];
           var arraylist = XLSX.utils.sheet_to_json(worksheet, { raw: true });
-          this.sheetData = [];
+          this.sheetData[name] = [];
           for (let index = 0; index < arraylist.length; index++) {
             const element = arraylist[index];
-            this.sheetData.push({
-              docNumber: element["شماره داوطلبي سنجش"],
-              feilds: element["گرايش (هاي) انتخابي"].split("-"),
+            console.log(element);
+            this.sheetData[name].push({
+              docNumber: element["شماره پرونده داوطلب"],
+              number: element["شماره داوطلب"],
+              examYear: element["سال آزمون"],
+              feild: element["مجموعه رشته"],
+              chooseFeilds: element["گرايش (هاي) انتخابي"]
+                ? element["گرايش (هاي) انتخابي"].split("-")
+                : "",
+              group: element["گروه"],
               lastName: element["نام خانوادگي"],
               name: element["نام"],
-              gender: element["جنسیت"],
               fatherName: element["نام پدر"],
-              talent: element["استعداد درخشان"] == "خیر" ? false : true,
+              gender: element["جنسیت"],
               birthdate: element["تاريخ تولد"],
+              idNumber: element["شماره شناسنامه"],
+              birthCer: element["سري و سريال شناسنامه"],
+              nId: element["كد ملي"],
+              unic: element["یکتا"],
+              religion: element["دین"],
+              dutyState: element["وضعيت نظام وظيفه"],
+              birthCity: element["شهر محل تولد"],
+              city: element["شهر محل سكونت"],
+              cityCer: element["شهر محل صدور شناسنامه"],
+              bachUniType: element["نوع دانشگاه كارشناسي"],
               bachelorUni: element["دانشگاه محل اخذ مدرك كارشناسي"],
+              bachelorField: element["رشته تحصيلي كارشناسي"],
               masterUni: element["دانشگاه محل اخذ مدرك كارشناسي ارشد"],
-              fmasterUni: element["رشته تحصيلي كارشناسي ارشد"],
+              masterField: element["رشته تحصيلي كارشناسي ارشد"],
               thesisTitle: element["عنوان پايان نامه كارشناسي ارشد"],
-              masterSupervisorName:
-                element["نام استاد راهنما كارشناسي ارشد"].split("،"),
+              masterSupervisorName: element["نام استاد راهنما كارشناسي ارشد"]
+                ? element["نام استاد راهنما كارشناسي ارشد"].split("،")
+                : "",
               diplomaGrade: element["معدل ديپلم"],
               writtenDiplomaGrade: element["معدل كتبي ديپلم"],
               bachelorGrade: element["معدل دوره كارشناسي"],
-              masterGradeWithThesss: element["معدل با احتساب پايان نامه ارشد"],
+              sixthSemGrade: element["معدل تا پايان نيمسال ششم"],
+              seventhSemGrade: element["معدل تا پايان نيمسال هفتم"],
+              gradeWithoutThesis: element["معدل بدون پايان نامه ارشد"],
+              gradeWithThesss: element["معدل با احتساب پايان نامه ارشد"],
+              masterGrade: element["معدل كارشناسي ارشد يا دكتري حرفه اي"],
               bachelorDate: element["تاريخ اخذ مدرك كاررشناسي"],
               masterDate: element["تاريخ اخذ مدرك ارشد"],
               employmentStatus: element["وضعيت شغلي"],
+              year: element["سال"],
+              month: element["ماه"],
               quota: element["استفاده از سهميه"],
+              homeNumber: element["تلفن منزل"],
+              emergencyNumber: element["تلفن ضروري"],
               phoneNumber: element["تلفن همراه"],
               email: element["پست الكترونيكي"],
               address: element["آدرس"],
+              paid: element["مبلغ پرداختي (تاييد شده)"],
               evNumber: element["شماره داوطلبي سنجش"],
+              imageSent: element["ارسال عكس"] == "بله" ? true : false,
+              completeDoc: element["ارسال عكس"] == "بله" ? true : false,
+              sacrifise: element["حائز شرايط ايثارگري طبق اظهار دانشجو"],
+              ahadiPrize: element["متقاضي جايزه شهيد احدي"],
             });
           }
         };
@@ -266,7 +353,7 @@ export default {
 }
 .upload {
   min-width: 600px;
-  min-height: 400px;
+  min-height: 500px;
   color: var(--on-color-3);
   &__header {
     padding: 16px 24px 16px 24px;
@@ -284,7 +371,7 @@ export default {
     margin: 40px;
   }
   &__input {
-    width: 250px;
+    width: 70%;
   }
   &__button {
     align-self: flex-end;
@@ -305,11 +392,10 @@ export default {
     }
   }
   &__name {
+    width: 70%;
     margin-top: 20px;
-    align-self: flex-start;
-    margin-right: 96px;
-    & > span:first-child {
-      margin-left: 10px;
+    & span:first-child {
+      margin-left: 15px;
     }
   }
   &__buttons {
