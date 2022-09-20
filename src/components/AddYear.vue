@@ -67,67 +67,71 @@
     </div>
   </div>
   <modal-window v-if="uploadForm" @esc="cancel" title="اضافه کردن مصاحبه جدید">
-    <div class="upload i-flex-column i-flex-justify-between">
-      <div class="i-flex-column i-flex-align-center upload__content">
-        <field-text-input theme="light" class="upload__input" label="سال" />
-        <div class="upload__name i-flex i-flex-justify-between">
+    <div class="upload-form i-flex-column i-flex-justify-between">
+      <div class="i-flex-column i-flex-align-center upload-form__content">
+        <field-text-input
+          theme="light"
+          class="upload-form__input"
+          label="سال"
+        />
+        <div class="upload-form__name i-flex i-flex-justify-between">
           <div>
             <span>کنکور:</span>
             <span>{{ filesName["konkur"] }}</span>
           </div>
           <div class="i-flex">
             <label
-              class="upload__button upload__button-delete i-flex i-flex-justify-center"
+              class="upload-form__button upload-form__button-delete i-flex i-flex-justify-center"
               v-if="filesName['konkur']"
             >
               <img
-                class="upload__button-delete-icon"
+                class="upload-form__button-delete-icon"
                 src="../assets/images/delete.svg"
                 alt=""
                 @click="deleteUploaded('konkur')"
               />
             </label>
             <label
-              class="upload__button i-flex i-flex-justify-center"
+              class="upload-form__button i-flex i-flex-justify-center"
               for="file-input"
             >
               <img
-                class="upload__button__icon"
+                class="upload-form__button__icon"
                 src="../assets/images/upload.svg"
                 alt=""
               />
             </label>
           </div>
         </div>
-        <div class="upload__name i-flex i-flex-justify-between">
+        <div class="upload-form__name i-flex i-flex-justify-between">
           <div>
             <span>استعداد درخشان:</span> <span>{{ filesName["talent"] }}</span>
           </div>
           <div class="i-flex">
             <label
-              class="upload__button upload__button-delete i-flex i-flex-justify-center"
+              class="upload-form__button upload-form__button-delete i-flex i-flex-justify-center"
               v-if="filesName['talent']"
             >
               <img
-                class="upload__button-delete-icon"
+                class="upload-form__button-delete-icon"
                 src="../assets/images/delete.svg"
                 alt=""
                 @click="deleteUploaded('talent')"
               />
             </label>
             <label
-              class="upload__button i-flex i-flex-justify-center"
+              class="upload-form__button i-flex i-flex-justify-center"
               for="file-input2"
             >
               <img
-                class="upload__button__icon"
+                class="upload-form__button__icon"
                 src="../assets/images/upload.svg"
                 alt=""
               />
             </label>
           </div>
         </div>
-        <div class="upload__name i-flex">
+        <div class="upload-form__name i-flex">
           <span>تعداد متقاضیان :</span>
           <span>{{ studentsNumber }}</span>
         </div>
@@ -146,7 +150,7 @@
         @change="getExcel($event, 'talent')"
         hidden
       />
-      <div class="upload__buttons i-flex i-flex-justify-between">
+      <div class="upload-form__buttons i-flex i-flex-justify-between">
         <Button
           label="تایید"
           theme="light"
@@ -286,15 +290,13 @@ export default {
             const element = arraylist[index];
             this.sheetData[name].push({
               docNumber: element["شماره پرونده داوطلب"],
-              number: element["شماره داوطلب"],
+              condidateNumber: element["شماره داوطلب"],
               examYear: element["سال آزمون"],
               feild: element["مجموعه رشته"],
-              chooseFeilds: element["گرايش (هاي) انتخابي"]
-                ? element["گرايش (هاي) انتخابي"].split("-")
-                : "",
+              chosenFeilds: element["گرايش (هاي) انتخابي"],
               group: element["گروه"],
               lastName: element["نام خانوادگي"],
-              name: element["نام"],
+              sudentName: element["نام"],
               fatherName: element["نام پدر"],
               gender: element["جنسیت"],
               birthdate: element["تاريخ تولد"],
@@ -313,9 +315,7 @@ export default {
               masterUni: element["دانشگاه محل اخذ مدرك كارشناسي ارشد"],
               masterField: element["رشته تحصيلي كارشناسي ارشد"],
               thesisTitle: element["عنوان پايان نامه كارشناسي ارشد"],
-              masterSupervisorName: element["نام استاد راهنما كارشناسي ارشد"]
-                ? element["نام استاد راهنما كارشناسي ارشد"].split("،")
-                : "",
+              masterSupervisorName: element["نام استاد راهنما كارشناسي ارشد"],
               diplomaGrade: element["معدل ديپلم"],
               writtenDiplomaGrade: element["معدل كتبي ديپلم"],
               bachelorGrade: element["معدل دوره كارشناسي"],
@@ -327,14 +327,14 @@ export default {
               bachelorDate: element["تاريخ اخذ مدرك كاررشناسي"],
               masterDate: element["تاريخ اخذ مدرك ارشد"],
               employmentStatus: element["وضعيت شغلي"],
-              year: element["سال"],
-              month: element["ماه"],
+              audYear: element["سال"],
+              audMonth: element["ماه"],
               quota: element["استفاده از سهميه"],
               homeNumber: element["تلفن منزل"],
               emergencyNumber: element["تلفن ضروري"],
               phoneNumber: element["تلفن همراه"],
               email: element["پست الكترونيكي"],
-              address: element["آدرس"],
+              homeAddress: element["آدرس"],
               paid: element["مبلغ پرداختي (تاييد شده)"],
               evNumber: element["شماره داوطلبي سنجش"],
               imageSent: element["ارسال عكس"] == "بله" ? true : false,
@@ -429,7 +429,7 @@ export default {
     }
   }
 }
-.upload {
+.upload-form {
   min-width: 600px;
   min-height: 370px;
   color: var(--on-color-3);
