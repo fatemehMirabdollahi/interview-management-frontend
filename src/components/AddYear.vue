@@ -73,6 +73,7 @@
           theme="light"
           class="upload-form__input"
           label="سال"
+          v-model="newYearName"
         />
         <div class="upload-form__name i-flex i-flex-justify-between">
           <div>
@@ -243,6 +244,7 @@ export default {
         talent: [],
       },
       selected: "",
+      newYearName: "",
     };
   },
   computed: {
@@ -259,7 +261,13 @@ export default {
   },
   methods: {
     addInterview() {
-      this.cancel();
+      let body = {
+        students: this.sheetData["konkur"].concat(this.sheetData["talent"]),
+        year: this.newYearName,
+      };
+      this.$axios.post("/student", body);
+      this.uploadForm = false;
+      // this.cancel();
     },
     cancel() {
       this.uploadForm = false;
@@ -288,13 +296,13 @@ export default {
           this.sheetData[name] = [];
           for (let index = 0; index < arraylist.length; index++) {
             const element = arraylist[index];
-            this.sheetData[name].push({
+            let newEl = {
               docNumber: element["شماره پرونده داوطلب"],
               condidateNumber: element["شماره داوطلب"],
               examYear: element["سال آزمون"],
-              feild: element["مجموعه رشته"],
-              chosenFeilds: element["گرايش (هاي) انتخابي"],
-              group: element["گروه"],
+              field: element["مجموعه رشته"],
+              chosenfields: element["گرايش (هاي) انتخابي"],
+              fieldGroup: element["گروه"],
               lastName: element["نام خانوادگي"],
               sudentName: element["نام"],
               fatherName: element["نام پدر"],
@@ -337,11 +345,21 @@ export default {
               homeAddress: element["آدرس"],
               paid: element["مبلغ پرداختي (تاييد شده)"],
               evNumber: element["شماره داوطلبي سنجش"],
-              imageSent: element["ارسال عكس"] == "بله" ? true : false,
-              completeDoc: element["ارسال عكس"] == "بله" ? true : false,
+              imageSent: element["ارسال عكس"],
+              completeDoc: element["ارسال عكس"],
               sacrifise: element["حائز شرايط ايثارگري طبق اظهار دانشجو"],
               ahadiPrize: element["متقاضي جايزه شهيد احدي"],
-            });
+              talent: name == "talent" ? true : false,
+            };
+            for (const key in newEl) {
+              if (Object.hasOwnProperty.call(newEl, key)) {
+                const val = newEl[key];
+                if (!val) {
+                  newEl[key] = null;
+                }
+              }
+            }
+            this.sheetData[name].push(newEl);
           }
         };
       }
@@ -350,9 +368,7 @@ export default {
       this.selected = name;
       this.deleteModal = true;
     },
-    submit() {
-      this.uploadForm = false;
-    },
+
     cancelDelete() {
       this.deleteModal = false;
       this.selected = null;
