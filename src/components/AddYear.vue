@@ -35,10 +35,10 @@
           {{ index + 1 }}
         </div>
         <div class="i-flex i-flex-align-center" style="flex: 5">
-          {{ row.year }}
+          {{ row.interview_year }}
         </div>
         <div class="i-flex i-flex-align-center" style="flex: 4">
-          {{ row.requests }}
+          {{ row.students_number }}
         </div>
         <div class="i-flex i-flex-align-center" style="flex: 4">
           {{ row.interviewed }}
@@ -199,40 +199,7 @@ export default {
   components: { Button, FieldTextInput, ModalWindow },
   data() {
     return {
-      yearData: [
-        {
-          year: 1399,
-          requests: 200,
-          interviewed: 100,
-          accepts: 100,
-          konkur: "کنکور",
-          talent: "استعداد",
-        },
-        {
-          year: 1399,
-          requests: 200,
-          interviewed: 100,
-          accepts: 100,
-          konkur: "کنکور",
-          talent: "استعداد",
-        },
-        {
-          year: 1399,
-          requests: 200,
-          interviewed: 100,
-          accepts: 100,
-          konkur: "کنکور",
-          talent: "استعداد",
-        },
-        {
-          year: 1399,
-          requests: 200,
-          interviewed: 100,
-          accepts: 100,
-          konkur: "کنکور",
-          talent: "استعداد",
-        },
-      ],
+      yearData: [],
       uploadForm: false,
       deleteModal: false,
       filesName: {
@@ -246,6 +213,12 @@ export default {
       selected: "",
       newYearName: "",
     };
+  },
+  created() {
+    this.$axios.get("/interview").then((result) => {
+      this.yearData = result.data;
+      console.log(result.data);
+    });
   },
   computed: {
     studentsNumber() {

@@ -6,9 +6,6 @@
     <div
       class="i-flex-column i-flex-1 i-flex-align-center i-flex-justify-center side-navbar__menu"
     >
-      <div class="i-flex i-flex side-navbar__item" @click="open('AddYear')">
-        <span> سال های مصاحبه </span>
-      </div>
       <div class="i-flex i-flex side-navbar__item" @click="open('Selection')">
         <span>غربالگری</span>
       </div>
@@ -27,7 +24,7 @@ export default {
   emits: ["open"],
   methods: {
     open(pageName) {
-      this.$emit("open", pageName);
+      this.$router.push(pageName);
     },
   },
 };
