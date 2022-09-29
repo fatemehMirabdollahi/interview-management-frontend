@@ -97,6 +97,7 @@ export default {
   }
   &__menu {
     position: absolute;
+    box-shadow: 5px 5px 10px 1px var(--color-3);
     left: 2px;
     top: 47px;
     background: var(--color-3);
@@ -104,7 +105,7 @@ export default {
     width: 150px;
     z-index: 5;
     border-radius: 5px;
-    border: 0.5px solid var(--on-color-3);
+    border: 0.5px solid var(--highlight-color);
     &-item {
       padding: 10px;
       &:hover {
@@ -121,6 +122,7 @@ export default {
     }
   }
   &__selection {
+    z-index: 5;
     position: absolute;
     margin-top: 20px;
     right: 320px;

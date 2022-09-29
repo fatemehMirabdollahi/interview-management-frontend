@@ -72,8 +72,8 @@ $border: 6px;
 .secondary {
   cursor: pointer;
   background-color: transparent;
-  color: var(--on-color-3);
-  border: solid var(--on-color-3) 1px;
+  color: var(--color-3);
+  border: solid var(--color-3) 1px;
   font-size: $fontSize;
   border-radius: $border;
   &:focus {
@@ -85,6 +85,8 @@ $border: 6px;
     box-shadow: var(--highlight-color) 1.95px 1.95px 2.6px;
   }
   &__light {
+    color: var(--on-color-3);
+    border: solid var(--on-color-3) 1px;
     &:focus {
       border: 2px solid var(--highlight-light-color);
       box-shadow: var(--highlight-light-color) 1.95px 1.95px 2.6px;
