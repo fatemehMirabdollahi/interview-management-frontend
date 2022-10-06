@@ -13,7 +13,7 @@
     <div class="selection__table i-flex-column">
       <div class="selection__table__row selection__table__row--header i-flex">
         <div class="i-flex i-flex-align-center" style="flex: 1"></div>
-        <div class="i-flex i-flex-align-center" style="flex: 2">
+        <div class="i-flex i-flex-align-center" style="flex: 3">
           شماره پرونده
         </div>
         <div class="i-flex i-flex-align-center" style="flex: 3">نام</div>
@@ -43,7 +43,7 @@
         <div class="i-flex i-flex-align-center" style="flex: 1">
           {{ index + 1 }}
         </div>
-        <div class="i-flex i-flex-align-center" style="flex: 2">
+        <div class="i-flex i-flex-align-center" style="flex: 3">
           {{ row.docnumber }}
         </div>
         <div class="i-flex i-flex-align-center" style="flex: 3">
@@ -100,7 +100,7 @@ export default {
     interviewYear() {
       return this.$store.state.activeInterviewYear;
     },
-    selectes() {
+    selecteds() {
       if (!this.students.length) return null;
       return this.students
         .filter((el) => el.selected)
@@ -109,23 +109,20 @@ export default {
   },
   watch: {
     interviewYear() {
-      this.$axios.get(`/interview/ ${this.interviewYear}`).then((response) => {
-        this.students = response.data;
-        for (let index = 0; index < this.students.length; index++) {
-          const element = this.students[index];
-          if (element.selected) {
-            this.selectedStudents.push(element.docNumber);
-          }
-        }
-      });
+      this.getInterviewStudents();
     },
-    selectes() {
-      if (this.selectes.length == this.students.length) {
+    selecteds() {
+      if (this.selecteds.length == this.students.length) {
         this.overallSelected = true;
       } else {
         this.overallSelected = false;
       }
     },
+  },
+  created() {
+    if (this.interviewYear) {
+      this.getInterviewStudents();
+    }
   },
   data() {
     return {
@@ -137,6 +134,18 @@ export default {
     };
   },
   methods: {
+    getInterviewStudents() {
+      this.$axios.get(`/interview/ ${this.interviewYear}`).then((response) => {
+        this.students = response.data;
+        for (let index = 0; index < this.students.length; index++) {
+          const element = this.students[index];
+          if (element.selected) {
+            this.selectedStudents.push(element.docnumber);
+          }
+        }
+      });
+    },
+
     cancelEdit() {
       this.editMode = false;
       for (let index = 0; index < this.students.length; index++) {
@@ -150,9 +159,21 @@ export default {
       let selecteds = this.students
         .filter((el) => el.selected)
         .map((el) => el.docnumber);
-      this.$axios.put("/student/select", selecteds).then((response) => {
-        console.log(response);
-      });
+      let unSelecteds = [];
+      for (let index = 0; index < this.selectedStudents.length; index++) {
+        const element = this.selectedStudents[index];
+        if (!this.selecteds.includes(element)) {
+          unSelecteds.push(element);
+        }
+      }
+      this.$axios
+        .put("/student/select", {
+          selecteds: selecteds,
+          unSelecteds: unSelecteds,
+        })
+        .then((response) => {
+          console.log(response);
+        });
     },
     updateChecks() {
       for (let index = 0; index < this.students.length; index++) {
