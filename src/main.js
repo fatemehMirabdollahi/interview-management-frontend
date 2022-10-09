@@ -10,4 +10,10 @@ import vClickOutside from "click-outside-vue3";
 
 const app = createApp(App);
 app.config.globalProperties.$axios = axios;
-app.use(store).use(router).use(BootstrapVue3).use(vClickOutside).mount("#app");
+app
+  .use(store)
+  .use(router)
+  .use(BootstrapVue3)
+  .use(vClickOutside)
+  .use(require("vue3-jalali-moment"))
+  .mount("#app");
