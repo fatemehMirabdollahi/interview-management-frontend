@@ -9,6 +9,9 @@
       <div class="i-flex i-flex side-navbar__item" @click="open('Selection')">
         <span>غربالگری</span>
       </div>
+      <div class="i-flex i-flex side-navbar__item" @click="open('scheduling')">
+        <span>زمانبندی</span>
+      </div>
       <div class="i-flex i-flex side-navbar__item" @click="open('Selection')">
         <span>مصاحبه</span>
       </div>

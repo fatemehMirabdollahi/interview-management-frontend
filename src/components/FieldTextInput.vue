@@ -17,7 +17,11 @@
         :placeholder="placeholder"
         class="input"
         :class="[
-          { 'input-selected': selected, 'input--light': theme == 'light' },
+          {
+            'input-selected': selected,
+            'input--light': theme == 'light',
+            'input-error': error,
+          },
         ]"
       />
     </div>
@@ -54,11 +58,27 @@ export default {
     theme: {
       type: String,
     },
+    range: {
+      type: Object,
+    },
   },
   data() {
     return {
       focused: false,
     };
+  },
+  computed: {
+    error() {
+      if (this.range)
+        if (
+          this.modelValue < this.range.min ||
+          this.modelValue > this.range.max ||
+          (!Number(this.modelValue) && this.modelValue !== 0)
+        ) {
+          return true;
+        }
+      return false;
+    },
   },
   created() {},
 };
@@ -93,6 +113,7 @@ $field-height: 40px;
     border: 2px solid var(--highlight-color);
     box-shadow: var(--highlight-color) 1.95px 1.95px 2.6px;
   }
+
   &--light {
     background: var(--on-color-3);
     color: var(--color-3);
@@ -107,8 +128,15 @@ $field-height: 40px;
       border: none;
     }
   }
+  &-error {
+    border: 2px red solid !important;
+  }
 }
 .field {
+  position: relative;
+  text-align: center;
+  width: 100%;
+  color: var(--on-color-3);
   &__body {
     min-height: 40px;
     &--light {
@@ -117,10 +145,6 @@ $field-height: 40px;
       }
     }
   }
-  position: relative;
-  text-align: center;
-  width: 100%;
-  color: var(--on-color-3);
   &__label {
     font-size: fontSize("l");
     margin-bottom: 15px;

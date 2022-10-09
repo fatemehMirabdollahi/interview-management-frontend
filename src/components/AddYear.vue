@@ -269,6 +269,7 @@ export default {
           this.sheetData[name] = [];
           for (let index = 0; index < arraylist.length; index++) {
             const element = arraylist[index];
+            console.log(element["دين"]);
             let newEl = {
               docNumber: element["شماره پرونده داوطلب"],
               condidateNumber: element["شماره داوطلب"],
@@ -279,13 +280,13 @@ export default {
               lastName: element["نام خانوادگي"],
               sudentName: element["نام"],
               fatherName: element["نام پدر"],
-              gender: element["جنسیت"],
+              gender: element["جنسيت"],
               birthdate: element["تاريخ تولد"],
               idNumber: element["شماره شناسنامه"],
-              birthCer: element["سري و سريال شناسنامه"],
+              birthCer: element["سری و سريال شناسنامه"],
               nId: element["كد ملي"],
               unic: element["یکتا"],
-              religion: element["دین"],
+              religion: element["دين"],
               dutyState: element["وضعيت نظام وظيفه"],
               birthCity: element["شهر محل تولد"],
               city: element["شهر محل سكونت"],

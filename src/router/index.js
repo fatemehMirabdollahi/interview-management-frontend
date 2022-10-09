@@ -3,6 +3,7 @@ import Home from "@/views/Home.vue";
 import Login from "@/views/Login.vue";
 import AddYear from "@/components/AddYear";
 import Selection from "@/components/Selection";
+import Scheduling from "@/components/Scheduling";
 const routes = [
   {
     path: "/",
@@ -16,6 +17,10 @@ const routes = [
       {
         path: "/selection",
         component: Selection,
+      },
+      {
+        path: "/scheduling",
+        component: Scheduling,
       },
     ],
   },

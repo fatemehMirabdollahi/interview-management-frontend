@@ -12,20 +12,20 @@
     </div>
     <div class="selection__table i-flex-column">
       <div class="selection__table__row selection__table__row--header i-flex">
-        <div class="i-flex i-flex-align-center" style="flex: 1"></div>
-        <div class="i-flex i-flex-align-center" style="flex: 3">
+        <div class="i-flex i-flex-align-center" style="flex: 2"></div>
+        <div class="i-flex i-flex-align-center" style="flex: 4">
           شماره پرونده
         </div>
-        <div class="i-flex i-flex-align-center" style="flex: 3">نام</div>
-        <div class="i-flex i-flex-align-center" style="flex: 4">
+        <div class="i-flex i-flex-align-center" style="flex: 4">نام</div>
+        <div class="i-flex i-flex-align-center" style="flex: 5">
           نام خانوادگی
         </div>
-        <div class="i-flex i-flex-align-center" style="flex: 3">تاریخ تولد</div>
-        <div class="i-flex i-flex-align-center" style="flex: 6">کارشناسی</div>
-        <div class="i-flex i-flex-align-center" style="flex: 6">
+        <div class="i-flex i-flex-align-center" style="flex: 4">تاریخ تولد</div>
+        <div class="i-flex i-flex-align-center" style="flex: 7">کارشناسی</div>
+        <div class="i-flex i-flex-align-center" style="flex: 7">
           کارشناسی ارشد
         </div>
-        <div class="i-flex i-flex-align-center" style="flex: 1">
+        <div class="i-flex i-flex-align-center" style="flex: 2">
           <b-form-checkbox
             v-model="overallSelected"
             :disabled="!editMode"
@@ -33,6 +33,7 @@
             style="cursor: pointer"
           ></b-form-checkbox>
         </div>
+        <div class="i-flex i-flex-align-center" style="flex: 1"></div>
       </div>
 
       <div
@@ -40,33 +41,44 @@
         v-for="(row, index) in students"
         :key="index"
       >
-        <div class="i-flex i-flex-align-center" style="flex: 1">
+        <div class="i-flex i-flex-align-center" style="flex: 2">
           {{ index + 1 }}
         </div>
-        <div class="i-flex i-flex-align-center" style="flex: 3">
+        <div class="i-flex i-flex-align-center" style="flex: 4">
           {{ row.docnumber }}
         </div>
-        <div class="i-flex i-flex-align-center" style="flex: 3">
+        <div class="i-flex i-flex-align-center" style="flex: 5">
           {{ row.studentname }}
         </div>
-        <div class="i-flex i-flex-align-center" style="flex: 4">
+        <div class="i-flex i-flex-align-center" style="flex: 5">
           {{ row.lastname }}
         </div>
-        <div class="i-flex i-flex-align-center" style="flex: 3">
+        <div class="i-flex i-flex-align-center" style="flex: 4">
           {{ row.birthdate }}
         </div>
-        <div class="i-flex i-flex-align-center" style="flex: 6">
+        <div class="i-flex i-flex-align-center" style="flex: 7">
           {{ row.bacheloruni }}
         </div>
-        <div class="i-flex i-flex-align-center" style="flex: 6">
+        <div class="i-flex i-flex-align-center" style="flex: 7">
           {{ row.masteruni }}
         </div>
-        <div class="i-flex i-flex-align-center" style="flex: 1">
+        <div class="i-flex i-flex-align-center" style="flex: 2">
           <b-form-checkbox
             style="cursor: pointer"
             v-model="row.selected"
             :disabled="!editMode"
           ></b-form-checkbox>
+        </div>
+        <div
+          class="i-flex i-flex-align-center"
+          style="flex: 1"
+          @click="openDetailModal(row)"
+        >
+          <img
+            class="selection__table-more"
+            src="../assets/images/more.svg"
+            alt=""
+          />
         </div>
       </div>
     </div>
@@ -89,13 +101,26 @@
       />
     </div>
   </div>
+  <modal v-if="detailModal" title="اطلاعات دانشجو" @esc="detailModal = false">
+    <div class="i-flex selection__detail">
+      <div v-for="prop in Object.keys(selectedStudent)" :key="prop">
+        <div class="selection__detail-item i-flex-column">
+          <span>{{ prop }}</span>
+          <span>{{
+            selectedStudent[prop] ? selectedStudent[prop] : "??"
+          }}</span>
+        </div>
+      </div>
+    </div>
+  </modal>
 </template>
 
 <script>
 import EditIcon from "./icons/EditIcon";
 import FormButton from "./FormButton";
+import Modal from "./ModalWindow";
 export default {
-  components: { EditIcon, FormButton },
+  components: { EditIcon, FormButton, Modal },
   computed: {
     interviewYear() {
       return this.$store.state.activeInterviewYear;
@@ -126,6 +151,7 @@ export default {
   },
   data() {
     return {
+      detailModal: false,
       selected: null,
       students: [],
       editMode: false,
@@ -183,6 +209,10 @@ export default {
         else element.selected = this.overallSelected;
       }
     },
+    openDetailModal(student) {
+      this.selectedStudent = student;
+      this.detailModal = true;
+    },
   },
 };
 </script>
@@ -231,10 +261,41 @@ export default {
         width: 22px;
       }
     }
+    &-more {
+      cursor: pointer;
+      width: 15px;
+      &:hover {
+        width: 17px;
+      }
+    }
   }
   &__buttons {
     width: 280px;
     margin-top: 64px;
+  }
+  &__detail {
+    overflow: hidden auto;
+    min-width: 500px;
+    max-width: 1200px;
+    max-height: 75vh;
+    min-height: 200px;
+    padding: 32px;
+    flex-flow: row wrap;
+    &-item {
+      height: 50px;
+      border-right: solid 2px var(--highlight-light-color);
+
+      margin: 0 0 32px 64px;
+      padding-right: 7px;
+      color: var(--on-color-3);
+      & > span:last-child {
+        font-size: fontSize("m");
+      }
+      & > span:first-child {
+        font-weight: 700;
+        font-size: fontSize("l");
+      }
+    }
   }
 }
 </style>
