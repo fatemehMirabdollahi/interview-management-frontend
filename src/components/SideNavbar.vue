@@ -35,7 +35,7 @@ export default {
 
 <style lang="scss" scoped>
 .side-navbar {
-  width: 300px;
+  min-width: 300px;
   height: 100%;
   padding-top: 50px;
   background-color: var(--color-3);

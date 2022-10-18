@@ -240,6 +240,10 @@ export default {
       };
       this.$axios.post("/student", body);
       this.uploadForm = false;
+      this.$axios.get("/interview").then((result) => {
+        this.yearData = result.data;
+        console.log(result.data);
+      });
       // this.cancel();
     },
     cancel() {

@@ -73,7 +73,7 @@ export default {
         if (
           this.modelValue < this.range.min ||
           this.modelValue > this.range.max ||
-          (!Number(this.modelValue) && this.modelValue !== 0)
+          (!Number(this.modelValue) && Number(this.modelValue) !== 0)
         ) {
           return true;
         }

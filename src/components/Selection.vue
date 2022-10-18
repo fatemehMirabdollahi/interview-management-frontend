@@ -105,10 +105,8 @@
     <div class="i-flex selection__detail">
       <div v-for="prop in Object.keys(selectedStudent)" :key="prop">
         <div class="selection__detail-item i-flex-column">
-          <span>{{ prop }}</span>
-          <span>{{
-            selectedStudent[prop] ? selectedStudent[prop] : "??"
-          }}</span>
+          <span>{{ titles[prop] }}</span>
+          <span>{{ selectedStudent[prop] }}</span>
         </div>
       </div>
     </div>
@@ -157,6 +155,61 @@ export default {
       editMode: false,
       selectedStudents: [],
       overallSelected: false,
+      titles: {
+        docnumber: "شماره پرونده داوطلب",
+        condidatenumber: "شماره داوطلب",
+        examyear: "سال آزمون",
+        field: "مجموعه رشته",
+        chosenfields: "گرايش (هاي) انتخابي",
+        fieldgroup: "گروه",
+        lastname: "نام خانوادگي",
+        studentname: "نام",
+        fathername: "نام پدر",
+        gender: "جنسيت",
+        birthdate: "تاريخ تولد",
+        idnumber: "شماره شناسنامه",
+        birthcer: "سری و سريال شناسنامه",
+        nid: "كد ملي",
+        unic: "یکتا",
+        religion: "دين",
+        dutystate: "وضعيت نظام وظيفه",
+        birthcity: "شهر محل تولد",
+        city: "شهر محل سكونت",
+        citycer: "شهر محل صدور شناسنامه",
+        bachunitype: "نوع دانشگاه كارشناسي",
+        bacheloruni: "دانشگاه محل اخذ مدرك كارشناسي",
+        bachelorfield: "رشته تحصيلي كارشناسي",
+        masteruni: "دانشگاه محل اخذ مدرك كارشناسي ارشد",
+        masterfield: "رشته تحصيلي كارشناسي ارشد",
+        thesistitle: "عنوان پايان نامه كارشناسي ارشد",
+        mastersupervisorname: "نام استاد راهنما كارشناسي ارشد",
+        diplomagrade: "معدل ديپلم",
+        writtendiplomagrade: "معدل كتبي ديپلم",
+        bachelorgrade: "معدل دوره كارشناسي",
+        sixthsemgrade: "معدل تا پايان نيمسال ششم",
+        seventhsemgrade: "معدل تا پايان نيمسال هفتم",
+        gradewithoutthesis: "معدل بدون پايان نامه ارشد",
+        gradewiththesss: "معدل با احتساب پايان نامه ارشد",
+        mastergrade: "معدل كارشناسي ارشد يا دكتري حرفه اي",
+        bachelordate: "تاريخ اخذ مدرك كاررشناسي",
+        masterdate: "تاريخ اخذ مدرك ارشد",
+        employmentstatus: "وضعيت شغلي",
+        audyear: "سال",
+        audmonth: "ماه",
+        quota: "استفاده از سهميه",
+        homenumber: "تلفن منزل",
+        emergencynumber: "تلفن ضروري",
+        phonenumber: "تلفن همراه",
+        email: "پست الكترونيكي",
+        homeaddress: "آدرس",
+        paid: "مبلغ پرداختي (تاييد شده)",
+        evnumber: "شماره داوطلبي سنجش",
+        imagesent: "ارسال عكس",
+        completedoc: "ارسال عكس",
+        sacrifise: "حائز شرايط ايثارگري طبق اظهار دانشجو",
+        ahadiprize: "متقاضي جايزه شهيد احدي",
+        talent: "استعداد درخشان",
+      },
     };
   },
   methods: {
@@ -198,6 +251,7 @@ export default {
           unSelecteds: unSelecteds,
         })
         .then((response) => {
+          this.editMode = false;
           console.log(response);
         });
     },
@@ -284,9 +338,9 @@ export default {
     &-item {
       height: 50px;
       border-right: solid 2px var(--highlight-light-color);
-
-      margin: 0 0 32px 64px;
-      padding-right: 7px;
+      min-width: 190px;
+      margin: 0 0 32px 15px;
+      padding-right: 10px;
       color: var(--on-color-3);
       & > span:last-child {
         font-size: fontSize("m");

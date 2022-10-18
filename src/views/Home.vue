@@ -80,6 +80,7 @@ export default {
   background-color: var(--color-1);
   &__content {
     padding: 100px 64px;
+    width: calc(100vw - 300px);
   }
   &__user {
     position: absolute;
