@@ -19,11 +19,9 @@
           تعداد متقاضیان
         </div>
         <div class="i-flex i-flex-align-center" style="flex: 4">
-          مصاحبه شده ها
+          استعداد درخشان
         </div>
-        <div class="i-flex i-flex-align-center" style="flex: 4">
-          تعداد قبولی ها
-        </div>
+        <div class="i-flex i-flex-align-center" style="flex: 4">کنکور</div>
         <div class="i-flex i-flex-align-center" style="flex: 1"></div>
       </div>
       <div
@@ -41,10 +39,10 @@
           {{ row.students_number }}
         </div>
         <div class="i-flex i-flex-align-center" style="flex: 4">
-          {{ row.interviewed }}
+          {{ row.talent }}
         </div>
         <div class="i-flex i-flex-align-center" style="flex: 4">
-          {{ row.accepts }}
+          {{ row.students_number - row.talent }}
         </div>
         <div
           class="i-flex i-flex-align-center i-flex-justify-between"
@@ -60,7 +58,7 @@
             class="addYear__table-icon"
             src="../assets/images/edit.svg"
             alt=""
-            @click="editUploaded(row)"
+            @click="editUploaded(row.year)"
           />
         </div>
       </div>
@@ -222,14 +220,7 @@ export default {
   },
   computed: {
     studentsNumber() {
-      let number = 0;
-      if (this.sheetData["konkur"]) {
-        number += this.sheetData["konkur"].length;
-      }
-      if (this.sheetData["talent"]) {
-        number += this.sheetData["talent"].length;
-      }
-      return number;
+      return 10;
     },
   },
   methods: {
@@ -252,6 +243,7 @@ export default {
       this.filesName["talent"] = null;
       this.sheetData["konkur"] = [];
       this.sheetData["talent"] = [];
+      this.selected = null;
     },
     getExcel(event, name) {
       if (event.target.files) {
@@ -358,10 +350,9 @@ export default {
       this.filesName[name] = null;
       this.sheetData[name] = [];
     },
-    editUploaded(year) {
+    editUploaded(name) {
       this.uploadForm = true;
-      this.filesName["konkur"] = year.konkur;
-      this.filesName["talent"] = year.talent;
+      this.selected = name;
     },
   },
 };
