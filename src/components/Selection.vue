@@ -9,7 +9,15 @@
       >
         <edit-icon class="i-flex" :color="editMode ? '#394454' : '#bbbfca'" />
       </div>
+      <div class="i-flex i-flex-align-center selection__filter--select">
+        <span>وضعیت:</span>
+        <b-form-select
+          :options="selectionStatus"
+          v-model="selectionMode"
+        ></b-form-select>
+      </div>
     </div>
+
     <div class="selection__table i-flex-column">
       <div class="selection__table__row selection__table__row--header i-flex">
         <div class="i-flex i-flex-align-center" style="flex: 2"></div>
@@ -27,6 +35,7 @@
         </div>
         <div class="i-flex i-flex-align-center" style="flex: 2">
           <b-form-checkbox
+            v-if="selectionMode == 'both'"
             v-model="overallSelected"
             :disabled="!editMode"
             @change="updateChecks"
@@ -38,7 +47,7 @@
 
       <div
         class="selection__table__row i-flex"
-        v-for="(row, index) in students"
+        v-for="(row, index) in filteredStudents"
         :key="index"
       >
         <div class="i-flex i-flex-align-center" style="flex: 2">
@@ -120,6 +129,13 @@ import Modal from "./ModalWindow";
 export default {
   components: { EditIcon, FormButton, Modal },
   computed: {
+    filteredStudents() {
+      if (this.selectionMode == "both") return this.students;
+      if (this.selectionMode == "selected") {
+        return this.students.filter((el) => el.selected == true);
+      }
+      return this.students.filter((el) => el.selected == false);
+    },
     interviewYear() {
       return this.$store.state.activeInterviewYear;
     },
@@ -210,6 +226,21 @@ export default {
         ahadiprize: "متقاضي جايزه شهيد احدي",
         talent: "استعداد درخشان",
       },
+      selectionStatus: [
+        {
+          value: "selected",
+          text: "انتخاب شده",
+        },
+        {
+          value: "notSelected",
+          text: "انتخاب نشده",
+        },
+        {
+          value: "both",
+          text: "همه",
+        },
+      ],
+      selectionMode: "both",
     };
   },
   methods: {
@@ -229,13 +260,14 @@ export default {
       this.editMode = false;
       for (let index = 0; index < this.students.length; index++) {
         const element = this.students[index];
-        if (this.selectedStudents.includes(element.docNumber))
+        if (this.selectedStudents.includes(element.docnumber))
           element.selected = true;
         else element.selected = false;
       }
     },
     submit() {
-      let selecteds = this.students
+      let selecteds = [];
+      selecteds = this.students
         .filter((el) => el.selected)
         .map((el) => el.docnumber);
       let unSelecteds = [];
@@ -258,9 +290,7 @@ export default {
     updateChecks() {
       for (let index = 0; index < this.students.length; index++) {
         const element = this.students[index];
-        if (this.selectedStudents.includes(element.docNumber))
-          element.selected = this.overallSelected;
-        else element.selected = this.overallSelected;
+        element.selected = this.overallSelected;
       }
     },
     openDetailModal(student) {
@@ -348,6 +378,14 @@ export default {
       & > span:first-child {
         font-weight: 700;
         font-size: fontSize("l");
+      }
+    }
+  }
+  &__filter {
+    &--select {
+      margin-right: 24px;
+      & > span {
+        margin-left: 8px;
       }
     }
   }

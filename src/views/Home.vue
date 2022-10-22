@@ -1,6 +1,9 @@
 <template>
   <div class="i-flex home" dir="rtl">
-    <div class="i-flex i-flex-align-center home__selection">
+    <div
+      class="i-flex i-flex-align-center home__selection"
+      v-if="$router.currentRoute._value.fullPath != '/AddYear'"
+    >
       <span>انتخاب سال مصاحبه:</span>
       <div class="i-flex home__selection-field">
         <b-form-select :options="interviewYears" @change="test"></b-form-select>
@@ -61,7 +64,6 @@ export default {
       this.userMenu = false;
     },
     test(el) {
-      console.log(el);
       this.$store.commit("setInterviewYear", el);
     },
   },
