@@ -5,8 +5,10 @@
     :class="[
       action == 'secondary' ? 'secondary' : 'primary',
       theme == `light` ? `${action}__light` : '',
+      { disable: disable },
     ]"
     :style="{ width: `${size.width}px`, height: `${size.height}px` }"
+    :disabled="disable"
   >
     <span class="i-flex i-flex-justify-center i-flex-align-center label">{{
       label
@@ -17,6 +19,10 @@
 <script>
 export default {
   props: {
+    disable: {
+      type: Boolean,
+      default: false,
+    },
     action: {
       type: String,
       default: "primary",
@@ -101,5 +107,13 @@ $border: 6px;
 .label {
   top: -2px;
   position: relative;
+}
+.disable {
+  &:hover {
+    border: none;
+    box-shadow: none;
+    cursor: default;
+  }
+  opacity: 0.8;
 }
 </style>

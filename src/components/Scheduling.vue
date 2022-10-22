@@ -139,12 +139,14 @@
         label="زمانبندی"
         :size="{ width: 100, height: 40 }"
         @i-click="schedule"
+        :disable="students.length == 0 || dates.length == 0"
       />
       <form-button
         label="نمایش تقویم مصاحبه ها"
         theme="light"
         :size="{ width: 200, height: 40 }"
         @i-click="openCalender"
+        :disable="students.length == 0 || dates.length == 0"
       />
     </div>
     <div class="scheduling__field i-flex">
