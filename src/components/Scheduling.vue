@@ -227,12 +227,22 @@
           </div>
         </div>
       </div>
+      <div class="i-flex i-flex-justify-between report__buttons">
+        <form-button
+          label="print"
+          :size="{ width: 100, height: 40 }"
+          @i-click="download"
+        />
 
-      <form-button
-        label="print"
-        :size="{ width: 100, height: 40 }"
-        @i-click="download"
-      />
+        <form-button
+          v-if="
+            sudentsNumber <= scheduledInterviewNum && scheduledInterviewNum != 0
+          "
+          label="ذخیره جدول زمانبندی"
+          :size="{ width: 200, height: 40 }"
+          @i-click="saveCalender"
+        />
+      </div>
     </div>
   </div>
   <vue3-html2pdf
@@ -432,12 +442,6 @@ export default {
           type: "interview",
         });
         if (this.rest > 0 && index != ans - 1) {
-          console.log("here", this.rest);
-          console.log(ans, index, {
-            start: end,
-            end: this.addMinute(end, this.rest),
-            type: "rest",
-          });
           interviews.push({
             start: end,
             end: this.addMinute(end, this.rest),
@@ -506,6 +510,23 @@ export default {
         }
       }
     },
+    saveCalender() {
+      console.log(this.interviews);
+      let interviewData = {
+        interviewyear: this.interviewYear,
+        dates: this.dates,
+        interviewLength: this.interviewLength,
+        rest: this.rest,
+        starttime: `${this.startTime.hour}:${this.startTime.minute}`,
+        endtime: `${this.endTime.hour}:${this.endTime.minute}`,
+        gapstart: `${this.gapStart.hour}:${this.gapStart.minute}`,
+        gapEnd: `${this.gapEnd.hour}:${this.gapEnd.minute}`,
+        interviewnumber: this.scheduledInterviewNum,
+      };
+      console.log(interviewData);
+      let meets = this.interviews;
+      console.log(meets);
+    },
   },
 };
 </script>
@@ -553,6 +574,9 @@ $page-width: 297mm;
       & > button {
         margin-left: 64px;
       }
+    }
+    &-save-button {
+      margin-bottom: 20px;
     }
   }
   &-bold {
@@ -654,6 +678,11 @@ $page-width: 297mm;
     position: absolute;
     top: 20px;
     right: 45px;
+  }
+  &__buttons {
+    & > button {
+      margin-right: 20px;
+    }
   }
 }
 .test {
