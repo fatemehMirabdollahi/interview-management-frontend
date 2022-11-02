@@ -197,14 +197,14 @@
       <div class="scheduling__table i-flex-column">
         <div class="scheduling__table-header scheduling__table-row i-flex">
           <div
-            class="scheduling__table-column scheduling__table__width-150 i-flex i-flex-align-center i-flex-justify-center"
+            class="scheduling__table__width-150 i-flex i-flex-align-center i-flex-justify-center"
           >
             تاریخ
           </div>
           <div
             v-for="(time, index) in interviewsPerDaySchedule"
             :key="index"
-            class="scheduling__table-column i-flex i-flex-align-center i-flex-justify-center"
+            class="i-flex i-flex-align-center i-flex-justify-center"
             :class="[
               time.type == 'interview'
                 ? 'scheduling__table__width-150'
@@ -226,7 +226,7 @@
           :key="day"
         >
           <div
-            class="scheduling__table-column scheduling__table__width-150 i-flex i-flex-align-center i-flex-justify-center"
+            class="scheduling__table__width-150 i-flex i-flex-align-center i-flex-justify-center"
           >
             {{ day }}
           </div>
@@ -268,7 +268,7 @@
     ref="html2Pdf"
     :manual-pagination="true"
     :enable-download="true"
-    :filename="'test'"
+    :filename="'interviewShedule'"
     pdf-orientation="landscape"
     pdf-format="a4"
   >
@@ -286,7 +286,7 @@
         >
           <img
             class="report__logo"
-            src="../assets/images/testLogo.svg"
+            src="../assets/images/black_logo.svg"
             alt=""
           />
 
@@ -298,14 +298,14 @@
           <div class="report__table i-flex-column">
             <div class="report__table-header report__table-row i-flex">
               <div
-                class="report__table-column report__table__width-150 i-flex i-flex-align-center i-flex-justify-center"
+                class="report__table__width-150 i-flex i-flex-align-center i-flex-justify-center"
               >
                 تاریخ
               </div>
               <div
                 v-for="(time, index) in interviewsPerDaySchedule"
                 :key="index"
-                class="report__table-column test i-flex i-flex-align-center i-flex-justify-center"
+                class="report__table-header--color i-flex i-flex-align-center i-flex-justify-center"
                 :class="[
                   time.type == 'interview'
                     ? 'report__table__width-150'
@@ -327,7 +327,7 @@
               :key="day"
             >
               <div
-                class="report__table-column report__table__width-150 i-flex i-flex-align-center i-flex-justify-center"
+                class="report__table__width-150 i-flex i-flex-align-center i-flex-justify-center"
               >
                 {{ day }}
               </div>
@@ -726,6 +726,9 @@ $page-width: 297mm;
       color: white;
       font-size: 14px;
       height: 50px !important;
+      &--color {
+        background-color: rgb(75, 74, 77) !important;
+      }
     }
     &__width {
       &-150 {
@@ -780,8 +783,5 @@ $page-width: 297mm;
       margin-right: 20px;
     }
   }
-}
-.test {
-  background-color: rgb(75, 74, 77) !important;
 }
 </style>
