@@ -158,15 +158,20 @@
         label="زمانبندی"
         :size="{ width: 100, height: 40 }"
         @i-click="schedule"
-        :disable="students.length == 0 || dates.length == 0"
+        :disable="students.length == 0 || dates.length == 0 || hasError"
       />
       <form-button
         label="نمایش تقویم مصاحبه ها"
         theme="light"
         :size="{ width: 200, height: 40 }"
         @i-click="openCalender"
-        :disable="students.length == 0 || dates.length == 0"
+        :disable="students.length == 0 || dates.length == 0 || hasError"
       />
+    </div>
+    <div class="i-flex i-flex-justify-center">
+      <span v-if="hasError" class="scheduling__error-text"
+        >لطفا موارد مشخص شده را اصلاح کنید!</span
+      >
     </div>
     <div class="scheduling__field i-flex">
       <span class="scheduling__field-label">تعداد مصاحبه امکانپذیر:</span>
@@ -410,6 +415,7 @@ export default {
       timesPerDay: [],
       interviewsPerDaySchedule: [],
       changed: false,
+      hasError: false,
     };
   },
   computed: {
@@ -574,6 +580,7 @@ export default {
     },
     fieldChanged() {
       this.changed = true;
+      this.hasError = document.getElementsByClassName("input-error").length > 0;
     },
     saveCalender() {
       let interviewData = {
@@ -665,6 +672,11 @@ $page-width: 297mm;
     &-save-button {
       margin-bottom: 20px;
     }
+  }
+  &__error-text {
+    color: red;
+    font-size: fontSize("s");
+    margin-top: -20px;
   }
   &-bold {
     font-weight: bold;
