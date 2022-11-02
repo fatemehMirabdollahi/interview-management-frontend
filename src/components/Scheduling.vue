@@ -1,5 +1,13 @@
 <template>
   <div class="scheduling i-flex-column" v-if="!showCalender">
+    <img
+      class="scheduling__refresh"
+      width="48"
+      height="48"
+      src="../assets/images/refresh.svg"
+      v-if="changed && interviewYear"
+      @click="refresh"
+    />
     <div class="scheduling__field i-flex">
       <span class="scheduling__field-label"
         >تعداد دانشجویان منتخب برای مصاحبه :</span
@@ -15,6 +23,7 @@
           v-model="dates"
           :multiple="true"
           :iconOnly="true"
+          @change="fieldChanged"
         />
       </div>
     </div>
@@ -39,6 +48,7 @@
           type="number"
           v-model="interviewLength"
           :range="{ min: 5, max: 999 }"
+          @change="fieldChanged"
         />
       </div>
       <span class="scheduling__field-unit">دقیقه</span>
@@ -50,6 +60,7 @@
           type="number"
           v-model="rest"
           :range="{ min: 0, max: 999 }"
+          @change="fieldChanged"
         />
       </div>
       <span class="scheduling__field-unit">دقیقه</span>
@@ -63,6 +74,7 @@
             type="number"
             v-model="startTime.minute"
             :range="{ min: 0, max: 59 }"
+            @change="fieldChanged"
           />
         </div>
         <span class="scheduling-bold">:</span>
@@ -71,6 +83,7 @@
             type="number"
             v-model="startTime.hour"
             :range="{ min: 0, max: 23 }"
+            @change="fieldChanged"
           />
         </div>
       </div>
@@ -81,6 +94,7 @@
             type="number"
             v-model="endTime.minute"
             :range="{ min: 0, max: 59 }"
+            @change="fieldChanged"
           />
         </div>
         <span class="scheduling-bold">:</span>
@@ -89,6 +103,7 @@
             type="number"
             v-model="endTime.hour"
             :range="{ min: 0, max: 23 }"
+            @change="fieldChanged"
           />
         </div>
       </div>
@@ -102,6 +117,7 @@
             type="number"
             v-model="gapStart.minute"
             :range="{ min: 0, max: 59 }"
+            @change="fieldChanged"
           />
         </div>
         <span class="scheduling-bold">:</span>
@@ -110,6 +126,7 @@
             type="number"
             v-model="gapStart.hour"
             :range="{ min: 0, max: 23 }"
+            @change="fieldChanged"
           />
         </div>
       </div>
@@ -120,6 +137,7 @@
             type="number"
             v-model="gapEnd.minute"
             :range="{ min: 0, max: 59 }"
+            @change="fieldChanged"
           />
         </div>
         <span class="scheduling-bold">:</span>
@@ -128,6 +146,7 @@
             type="number"
             v-model="gapEnd.hour"
             :range="{ min: 0, max: 23 }"
+            @change="fieldChanged"
           />
         </div>
       </div>
@@ -368,28 +387,29 @@ export default {
       students: [],
       dates: [],
       startTime: {
-        hour: 8,
-        minute: 0,
+        hour: null,
+        minute: null,
       },
       endTime: {
-        hour: 15,
-        minute: 0,
+        hour: null,
+        minute: null,
       },
       interviewLength: 30,
-      rest: 10,
+      rest: null,
       gapStart: {
-        hour: 11,
-        minute: 30,
+        hour: null,
+        minute: null,
       },
       gapEnd: {
-        hour: 13,
-        minute: 0,
+        hour: null,
+        minute: null,
       },
       scheduledInterviewNum: 0,
       showCalender: false,
       interviews: {},
       timesPerDay: [],
       interviewsPerDaySchedule: [],
+      changed: false,
     };
   },
   computed: {
@@ -402,21 +422,59 @@ export default {
   },
   watch: {
     interviewYear() {
-      this.getSudentsDate();
+      this.getInterviewData();
+      this.getSudentsData();
+    },
+    dates() {
+      this.changed = true;
     },
   },
   created() {
-    this.getSudentsDate();
+    this.getSudentsData();
+    this.getInterviewData();
   },
   methods: {
     download() {
       this.$refs.html2Pdf.generatePdf();
     },
-    getSudentsDate() {
+    getSudentsData() {
       this.$axios
         .get(`/student/schedule/${this.interviewYear}`)
         .then((response) => {
           this.students = response.data;
+        });
+    },
+    getInterviewData() {
+      if (this.interviewYear)
+        this.$axios.get(`/meet/${this.interviewYear}`).then((response) => {
+          let interview = response.data.interview;
+          let meets = response.data.meets;
+          this.startTime.hour = interview.starttime.split(":")[0];
+          this.startTime.minute = interview.starttime.split(":")[1];
+          this.endTime.hour = interview.endtime.split(":")[0];
+          this.endTime.minute = interview.endtime.split(":")[1];
+          this.dates = interview.dates;
+          this.interviewLength = interview.interviewlength;
+          this.rest = interview.rest;
+          this.gapStart.hour = interview.gapstart.split(":")[0];
+          this.gapStart.minute = interview.gapstart.split(":")[1];
+          this.gapEnd.hour = interview.gapend.split(":")[0];
+          this.gapEnd.minute = interview.gapend.split(":")[1];
+          this.int;
+          this.interviews = meets;
+          this.scheduledInterviewNum =
+            meets[Object.keys(meets)[0]].filter((el) => el.type == "interview")
+              .length * Object.keys(meets).length;
+          console.log(meets);
+          this.interviewsPerDaySchedule = meets[Object.keys(meets)[0]].map(
+            (el) => {
+              return {
+                type: el.type,
+                start: el.start,
+                end: el.end,
+              };
+            }
+          );
         });
     },
     createInterviewTime(start, end) {
@@ -458,6 +516,10 @@ export default {
         hour: hourAdded + first.hour,
         minute: minuteAdded - hourAdded * 60,
       };
+    },
+    refresh() {
+      this.getInterviewData();
+      this.getSudentsData();
     },
     schedule() {
       this.startTime = {
@@ -510,22 +572,46 @@ export default {
         }
       }
     },
+    fieldChanged() {
+      this.changed = true;
+    },
     saveCalender() {
-      console.log(this.interviews);
       let interviewData = {
         interviewyear: this.interviewYear,
         dates: this.dates,
-        interviewLength: this.interviewLength,
+        interviewlength: this.interviewLength,
         rest: this.rest,
         starttime: `${this.startTime.hour}:${this.startTime.minute}`,
         endtime: `${this.endTime.hour}:${this.endTime.minute}`,
         gapstart: `${this.gapStart.hour}:${this.gapStart.minute}`,
-        gapEnd: `${this.gapEnd.hour}:${this.gapEnd.minute}`,
-        interviewnumber: this.scheduledInterviewNum,
+        gapend: `${this.gapEnd.hour}:${this.gapEnd.minute}`,
       };
-      console.log(interviewData);
-      let meets = this.interviews;
-      console.log(meets);
+      let meets = [];
+      for (const date in this.interviews) {
+        if (Object.hasOwnProperty.call(this.interviews, date)) {
+          const day = this.interviews[date];
+          for (let index = 0; index < day.length; index++) {
+            const element = day[index];
+            console.log(element);
+            let meet = {
+              type: element.type,
+              interviewyear: this.interviewYear,
+              docnumber: element.student ? element.student.docnumber : null,
+              date: `${date}`,
+              startTime: `${element.start.hour}:${element.start.minute}`,
+              endTime: `${element.end.hour}:${element.end.minute}`,
+            };
+            meets.push(meet);
+          }
+        }
+      }
+      let data = {
+        interview: interviewData,
+        meets: meets,
+      };
+      this.$axios.post("/meet", data).then((response) => {
+        console.log(response);
+      });
     },
   },
 };
@@ -536,6 +622,7 @@ $page-height: 209mm;
 $page-width: 297mm;
 .scheduling {
   overflow-x: auto;
+  position: relative;
   &__field {
     color: var(--on-color-1);
     margin-bottom: 32px;
@@ -613,6 +700,15 @@ $page-width: 297mm;
     margin: 10px;
     cursor: pointer;
     align-self: flex-end;
+  }
+  &__refresh {
+    position: absolute;
+    left: 0;
+    cursor: pointer;
+    &:hover {
+      width: 50px;
+      height: 50px;
+    }
   }
 }
 .report {
