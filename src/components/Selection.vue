@@ -282,9 +282,8 @@ export default {
           selecteds: selecteds,
           unSelecteds: unSelecteds,
         })
-        .then((response) => {
+        .then(() => {
           this.editMode = false;
-          console.log(response);
         });
     },
     updateChecks() {

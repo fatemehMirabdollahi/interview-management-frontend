@@ -1,7 +1,12 @@
 <template>
   <div
     class="card i-flex-column i-flex i-flex-align-center i-flex-justify-center"
+    draggable="true"
+    @dragstart="dragStart"
+    @drop.prevent="drop"
+    @dragover.prevent
     v-if="interview.type == 'interview'"
+    style="cursor: pointer"
   >
     <div v-if="interview.student">
       <span
@@ -24,6 +29,14 @@ export default {
   props: {
     interview: {
       type: Object,
+    },
+  },
+  methods: {
+    dragStart() {
+      this.$emit("dragged");
+    },
+    drop() {
+      this.$emit("dropped");
     },
   },
 };

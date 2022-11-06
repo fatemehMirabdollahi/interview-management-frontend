@@ -215,7 +215,6 @@ export default {
   created() {
     this.$axios.get("/interview").then((result) => {
       this.yearData = result.data;
-      console.log(result.data);
     });
   },
   computed: {
@@ -233,7 +232,6 @@ export default {
       this.uploadForm = false;
       this.$axios.get("/interview").then((result) => {
         this.yearData = result.data;
-        console.log(result.data);
       });
       // this.cancel();
     },
@@ -265,7 +263,6 @@ export default {
           this.sheetData[name] = [];
           for (let index = 0; index < arraylist.length; index++) {
             const element = arraylist[index];
-            console.log(element["دين"]);
             let newEl = {
               docNumber: element["شماره پرونده داوطلب"],
               condidateNumber: element["شماره داوطلب"],

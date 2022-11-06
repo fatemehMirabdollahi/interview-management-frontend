@@ -103,9 +103,9 @@ div::-webkit-scrollbar {
   justify-content: center;
 }
 .i-flex-justify-start {
-  justify-content: start;
+  justify-content: flex-start;
 }
-.i-flex-justfiy-end {
+.i-flex-justify-end {
   justify-content: flex-end;
 }
 
@@ -118,6 +118,9 @@ div::-webkit-scrollbar {
 }
 .i-flex-1 {
   flex: 1 0 auto;
+}
+.i-width-1-1 {
+  width: 100%;
 }
 img {
   -webkit-user-drag: none;

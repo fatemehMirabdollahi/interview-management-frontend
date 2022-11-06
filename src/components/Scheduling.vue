@@ -191,14 +191,24 @@
   </div>
   <div v-else>
     <div class="i-flex-column i-flex-align-center">
-      <img
-        class="scheduling__back"
-        width="40"
-        src="../assets/images/back.svg"
-        alt=""
-        srcset=""
-        @click="showCalender = false"
-      />
+      <div class="i-flex i-width-1-1 i-flex-justify-end">
+        <img
+          class="scheduling__back"
+          width="40"
+          src="../assets/images/back.svg"
+          alt=""
+          srcset=""
+          @click="(showCalender = false), refresh('calender')"
+        />
+        <img
+          class="scheduling__back"
+          width="48"
+          height="48"
+          src="../assets/images/refresh.svg"
+          @click="refresh('calender')"
+        />
+      </div>
+
       <div class="scheduling__table i-flex-column">
         <div class="scheduling__table-header scheduling__table-row i-flex">
           <div
@@ -247,7 +257,11 @@
                 : 'scheduling__table__width-20',
             ]"
           >
-            <interview-card :interview="interview" />
+            <interview-card
+              :interview="interview"
+              @dragged="dragstart(interview)"
+              @dropped="dragend(interview)"
+            />
           </div>
         </div>
       </div>
@@ -416,6 +430,8 @@ export default {
       interviewsPerDaySchedule: [],
       changed: false,
       hasError: false,
+      draggingInterview: null,
+      droppedOnInterview: null,
     };
   },
   computed: {
@@ -432,7 +448,7 @@ export default {
       this.getSudentsData();
     },
     dates() {
-      this.changed = true;
+      // this.changed = true;
     },
   },
   created() {
@@ -440,6 +456,41 @@ export default {
     this.getInterviewData();
   },
   methods: {
+    dragstart(interview) {
+      this.draggingInterview = { ...interview };
+    },
+    dragend(interview) {
+      this.droppedOnInterview = { ...interview };
+      let find = 0;
+      for (const key in this.interviews) {
+        if (Object.hasOwnProperty.call(this.interviews, key)) {
+          const day = this.interviews[key];
+          for (let index = 0; index < day.length; index++) {
+            const meet = day[index];
+            if (meet.id == this.draggingInterview.id) {
+              this.interviews[key][index].id = this.droppedOnInterview.id;
+              this.interviews[key][index].type = this.droppedOnInterview.type;
+              this.interviews[key][index].student =
+                this.droppedOnInterview.student;
+              find++;
+            } else if (meet.id == this.droppedOnInterview.id) {
+              this.interviews[key][index].id = this.draggingInterview.id;
+              this.interviews[key][index].type = this.draggingInterview.type;
+              this.interviews[key][index].student =
+                this.draggingInterview.student;
+
+              find++;
+            }
+            if (find == 2) {
+              break;
+            }
+          }
+        }
+        if (find == 2) {
+          break;
+        }
+      }
+    },
     download() {
       this.$refs.html2Pdf.generatePdf();
     },
@@ -450,28 +501,29 @@ export default {
           this.students = response.data;
         });
     },
-    getInterviewData() {
+    getInterviewData(input) {
       if (this.interviewYear)
         this.$axios.get(`/meet/${this.interviewYear}`).then((response) => {
           let interview = response.data.interview;
           let meets = response.data.meets;
-          this.startTime.hour = interview.starttime.split(":")[0];
-          this.startTime.minute = interview.starttime.split(":")[1];
-          this.endTime.hour = interview.endtime.split(":")[0];
-          this.endTime.minute = interview.endtime.split(":")[1];
-          this.dates = interview.dates;
-          this.interviewLength = interview.interviewlength;
-          this.rest = interview.rest;
-          this.gapStart.hour = interview.gapstart.split(":")[0];
-          this.gapStart.minute = interview.gapstart.split(":")[1];
-          this.gapEnd.hour = interview.gapend.split(":")[0];
-          this.gapEnd.minute = interview.gapend.split(":")[1];
-          this.int;
+          if (input != "calender") {
+            this.startTime.hour = interview.starttime.split(":")[0];
+            this.startTime.minute = interview.starttime.split(":")[1];
+            this.endTime.hour = interview.endtime.split(":")[0];
+            this.endTime.minute = interview.endtime.split(":")[1];
+            this.dates = interview.dates;
+            this.interviewLength = interview.interviewlength;
+            this.rest = interview.rest;
+            this.gapStart.hour = interview.gapstart.split(":")[0];
+            this.gapStart.minute = interview.gapstart.split(":")[1];
+            this.gapEnd.hour = interview.gapend.split(":")[0];
+            this.gapEnd.minute = interview.gapend.split(":")[1];
+            this.int;
+          }
           this.interviews = meets;
           this.scheduledInterviewNum =
             meets[Object.keys(meets)[0]].filter((el) => el.type == "interview")
               .length * Object.keys(meets).length;
-          console.log(meets);
           this.interviewsPerDaySchedule = meets[Object.keys(meets)[0]].map(
             (el) => {
               return {
@@ -523,11 +575,17 @@ export default {
         minute: minuteAdded - hourAdded * 60,
       };
     },
-    refresh() {
-      this.getInterviewData();
-      this.getSudentsData();
+    refresh(input) {
+      if (input == "calender") {
+        this.getInterviewData("calender");
+      } else {
+        this.getInterviewData();
+        this.getSudentsData();
+        this.changed = false;
+      }
     },
     schedule() {
+      this.changed = true;
       this.startTime = {
         hour: Number(this.startTime.hour),
         minute: Number(this.startTime.minute),
@@ -559,22 +617,26 @@ export default {
     },
     openCalender() {
       this.showCalender = true;
-      this.interviews = {};
-      let stIndex = 0;
-      for (let index = 0; index < this.dates.length; index++) {
-        const element = this.dates[index];
-        this.interviews[element] = [];
-        for (
-          let index = 0;
-          index < this.interviewsPerDaySchedule.length;
-          index++
-        ) {
-          const inter = this.interviewsPerDaySchedule[index];
-          this.interviews[element].push({
-            ...inter,
-            student: inter.type == "interview" ? this.students[stIndex] : null,
-          });
-          if (inter.type == "interview") stIndex++;
+      if (this.changed) {
+        this.interviews = {};
+        let stIndex = 0;
+        for (let index0 = 0; index0 < this.dates.length; index0++) {
+          const element = this.dates[index0];
+          this.interviews[element] = [];
+          for (
+            let index = 0;
+            index < this.interviewsPerDaySchedule.length;
+            index++
+          ) {
+            const inter = this.interviewsPerDaySchedule[index];
+            this.interviews[element].push({
+              ...inter,
+              student:
+                inter.type == "interview" ? this.students[stIndex] : null,
+              id: index + index0 * this.interviewsPerDaySchedule.length,
+            });
+            if (inter.type == "interview") stIndex++;
+          }
         }
       }
     },
@@ -599,7 +661,6 @@ export default {
           const day = this.interviews[date];
           for (let index = 0; index < day.length; index++) {
             const element = day[index];
-            console.log(element);
             let meet = {
               type: element.type,
               interviewyear: this.interviewYear,
@@ -616,9 +677,12 @@ export default {
         interview: interviewData,
         meets: meets,
       };
-      this.$axios.post("/meet", data).then((response) => {
-        console.log(response);
-      });
+      this.$axios
+        .post("/meet", data)
+        .then(() => {})
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
 };
@@ -710,8 +774,10 @@ $page-width: 297mm;
   }
   &__back {
     margin: 10px;
+    &:last-child {
+      margin-left: 50px;
+    }
     cursor: pointer;
-    align-self: flex-end;
   }
   &__refresh {
     position: absolute;
