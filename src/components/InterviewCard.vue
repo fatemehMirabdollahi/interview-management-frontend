@@ -1,12 +1,13 @@
 <template>
   <div
     class="card i-flex-column i-flex i-flex-align-center i-flex-justify-center"
-    draggable="true"
+    :draggable="needDrag"
     @dragstart="dragStart"
     @drop.prevent="drop"
     @dragover.prevent
     v-if="interview.type == 'interview'"
-    style="cursor: pointer"
+    :style="{ cursor: needDrag ? 'grab' : 'pointer' }"
+    @click="select"
   >
     <div v-if="interview.student">
       <span
@@ -30,13 +31,23 @@ export default {
     interview: {
       type: Object,
     },
+    needDrag: {
+      type: Boolean,
+      default: true,
+    },
   },
   methods: {
     dragStart() {
-      this.$emit("dragged");
+      if (this.needDrag) this.$emit("dragged");
     },
     drop() {
-      this.$emit("dropped");
+      if (this.needDrag) this.$emit("dropped");
+    },
+    select() {
+      if (!this.needDrag) {
+        this.$emit("select");
+        console.log("selected");
+      }
     },
   },
 };

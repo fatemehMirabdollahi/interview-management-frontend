@@ -105,7 +105,6 @@ $border: 6px;
 }
 
 .label {
-  top: -2px;
   position: relative;
 }
 .disable {

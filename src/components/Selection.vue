@@ -205,7 +205,7 @@ export default {
         sixthsemgrade: "معدل تا پايان نيمسال ششم",
         seventhsemgrade: "معدل تا پايان نيمسال هفتم",
         gradewithoutthesis: "معدل بدون پايان نامه ارشد",
-        gradewiththesss: "معدل با احتساب پايان نامه ارشد",
+        gradewiththesis: "معدل با احتساب پايان نامه ارشد",
         mastergrade: "معدل كارشناسي ارشد يا دكتري حرفه اي",
         bachelordate: "تاريخ اخذ مدرك كاررشناسي",
         masterdate: "تاريخ اخذ مدرك ارشد",

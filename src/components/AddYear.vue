@@ -297,7 +297,7 @@ export default {
               sixthSemGrade: element["معدل تا پايان نيمسال ششم"],
               seventhSemGrade: element["معدل تا پايان نيمسال هفتم"],
               gradeWithoutThesis: element["معدل بدون پايان نامه ارشد"],
-              gradeWithThesss: element["معدل با احتساب پايان نامه ارشد"],
+              gradeWithThesis: element["معدل با احتساب پايان نامه ارشد"],
               masterGrade: element["معدل كارشناسي ارشد يا دكتري حرفه اي"],
               bachelorDate: element["تاريخ اخذ مدرك كاررشناسي"],
               masterDate: element["تاريخ اخذ مدرك ارشد"],

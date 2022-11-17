@@ -12,7 +12,7 @@
       <div class="i-flex i-flex side-navbar__item" @click="open('scheduling')">
         <span>زمانبندی</span>
       </div>
-      <div class="i-flex i-flex side-navbar__item" @click="open('Selection')">
+      <div class="i-flex i-flex side-navbar__item" @click="open('Interview')">
         <span>مصاحبه</span>
       </div>
       <div class="i-flex i-flex side-navbar__item" @click="open('Selection')">
