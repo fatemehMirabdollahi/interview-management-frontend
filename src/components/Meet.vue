@@ -22,7 +22,7 @@
         موضوعات موردعلاقه در دکتری:
       </span>
       <div class="meet__input">
-        <field-text-input theme="light" />
+        <field-text-input theme="light" v-model="favphdfields" />
       </div>
     </div>
     <div class="meet__field i-flex-column">
@@ -30,17 +30,26 @@
         برداشت اولیه:
       </span>
       <div class="meet__text-area">
-        <field-text-area-input height="60" theme="light" />
+        <field-text-area-input
+          height="60"
+          theme="light"
+          v-model="firstimpression"
+        />
       </div>
     </div>
     <div class="meet__field i-flex-column">
       <span class="meet__lable i-flex i-flex-align-center"> توضیحات: </span>
       <div class="meet__text-area">
-        <field-text-area-input height="100" theme="light" />
+        <field-text-area-input height="100" theme="light" v-model="opinion" />
       </div>
     </div>
     <div class="meet__buttons i-flex i-flex-justify-between">
-      <Button label="تایید" theme="light" :size="{ width: 120, height: 40 }" />
+      <Button
+        label="تایید"
+        theme="light"
+        :size="{ width: 120, height: 40 }"
+        @i-click="submitComment"
+      />
       <Button
         action="secondary"
         theme="light"
@@ -110,6 +119,10 @@ export default {
         homeaddress: "آدرس",
         email: "پست الكترونيكي",
       },
+      firstimpression: "",
+      opinion: "",
+      favphdfields: "",
+      comments: [],
     };
   },
   props: {
@@ -118,16 +131,42 @@ export default {
     },
   },
   created() {
-    console.log(this.docnumber);
+    // this.user_id = Math.ceil(Math.random() * 5);
+    this.user_id = 2;
     if (this.docnumber) {
       this.$axios.get(`/student/${this.docnumber}`).then((response) => {
         this.student = response.data;
+      });
+      this.$axios.get(`comment/${this.docnumber}`).then((res) => {
+        this.comments = res.data;
+        let userComment = this.comments.find(
+          (el) => el.user_id == this.user_id
+        );
+
+        if (userComment) {
+          this.firstimpression = userComment.firstimpression;
+          this.opinion = userComment.opinion;
+          this.favphdfields = userComment.favphdfields;
+        }
       });
     }
   },
   methods: {
     moreDetails() {
       this.showDetails = true;
+    },
+    submitComment() {
+      this.$axios
+        .post("/comment", {
+          firstimpression: this.firstimpression,
+          opinion: this.opinion,
+          favphdfields: this.favphdfields,
+          user_id: this.user_id,
+          docnumber: this.docnumber,
+        })
+        .then(() => {
+          this.$emit("close");
+        });
     },
   },
 };
@@ -177,7 +216,7 @@ export default {
     margin-top: 24px;
   }
   &__buttons {
-    margin: 0 25% ;
+    margin: 0 25%;
   }
   &__back {
     margin-left: 0 !important;

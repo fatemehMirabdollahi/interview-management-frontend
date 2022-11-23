@@ -87,7 +87,7 @@ $border: 6px;
     box-shadow: var(--highlight-color) 1.95px 1.95px 2.6px;
   }
   &:hover {
-    border: 2px solid var(--highlight-color);
+    border: 2pnx solid var(--highlight-color);
     box-shadow: var(--highlight-color) 1.95px 1.95px 2.6px;
   }
   &__light {
