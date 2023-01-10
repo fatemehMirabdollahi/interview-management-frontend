@@ -68,7 +68,7 @@
           {{ index + 1 }}
         </div>
         <div class="i-flex i-flex-align-center" style="flex: 4">
-          {{ `${comment.user_id}`.substring(0, 20) }}
+          {{ `${comment.name}`.substring(0, 20) }}
         </div>
         <div class="i-flex i-flex-align-center" style="flex: 4">
           <span v-b-tooltip.hover :title="comment.firstimpression">
@@ -178,15 +178,15 @@ export default {
     },
   },
   created() {
-    // this.user_id = Math.ceil(Math.random() * 5);
-    this.user_id = 1;
+    this.name = this.$store.state.proName;
     if (this.docnumber) {
       this.$axios.get(`/student/${this.docnumber}`).then((response) => {
         this.student = response.data;
       });
       this.$axios.get(`comment/${this.docnumber}`).then((res) => {
-        this.comments = res.data.filter((el) => el.user_id != this.user_id);
-        let userComment = res.data.find((el) => el.user_id == this.user_id);
+        console.log(res);
+        this.comments = res.data.filter((el) => el.name != this.name);
+        let userComment = res.data.find((el) => el.name == this.name);
         if (userComment) {
           this.firstimpression = userComment.firstimpression;
           this.opinion = userComment.opinion;
@@ -204,7 +204,7 @@ export default {
         firstimpression: this.firstimpression,
         opinion: this.opinion,
         favphdfields: this.favphdfields,
-        user_id: this.user_id,
+        username: this.$store.state.username,
         docnumber: this.docnumber,
       });
     },
@@ -216,6 +216,7 @@ export default {
 .meet {
   padding: 32px 32px;
   min-width: 825px;
+  max-width: 1000px;
   min-height: 500px;
   max-height: 90vh;
   overflow: hidden auto;
@@ -256,7 +257,7 @@ export default {
     margin-top: 24px;
   }
   &__buttons {
-    margin: 0 25%;
+    margin: 0 30%;
     margin-top: 32px;
   }
   &__back {
