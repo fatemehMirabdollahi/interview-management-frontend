@@ -46,7 +46,20 @@ export default {
   },
   methods: {
     submit() {
-      this.$router.push("/");
+      this.$axios
+        .post("/auth/login", {
+          username: this.username,
+          password: this.password,
+        })
+        .then((res) => {
+          localStorage.setItem("token", res.data.token);
+          this.$axios.defaults.headers.common[
+            "x-access-token"
+          ] = `${localStorage.getItem("token")}`;
+          this.$store.commit("login", res.data.username);
+          localStorage.setItem("username", res.data.username);
+          this.$router.push("/");
+        });
     },
   },
 };

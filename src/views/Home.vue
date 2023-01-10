@@ -2,11 +2,17 @@
   <div class="i-flex home" dir="rtl">
     <div
       class="i-flex i-flex-align-center home__selection"
-      v-if="$router.currentRoute._value.fullPath != '/AddYear'"
+      v-if="
+        $router.currentRoute._value.fullPath != '/AddYear' &&
+        $router.currentRoute._value.fullPath != '/usermanagment'
+      "
     >
       <span>انتخاب سال مصاحبه:</span>
       <div class="i-flex home__selection-field">
-        <b-form-select :options="interviewYears" @change="test"></b-form-select>
+        <b-form-select
+          :options="interviewYears"
+          @change="setInterviewYear"
+        ></b-form-select>
       </div>
     </div>
     <navbar />
@@ -25,8 +31,11 @@
     </div>
 
     <div class="home__menu" v-if="userMenu">
-      <div class="i-flex i-flex-justify-center home__menu-item">user name</div>
-      <div dir="rtl" class="i-flex home__menu-item">
+      <div class="i-flex i-flex-justify-center home__menu-item">
+        {{ $store.state.proName }}
+        <!-- it should replaced with name -->
+      </div>
+      <div dir="rtl" class="i-flex home__menu-item" @click="logout">
         <img
           class="home__menu-logout"
           src="../assets/images/logout.svg"
@@ -63,8 +72,13 @@ export default {
     closeMenu() {
       this.userMenu = false;
     },
-    test(el) {
+    setInterviewYear(el) {
       this.$store.commit("setInterviewYear", el);
+    },
+    logout() {
+      this.$axios.defaults.headers.common["x-access-token"] = ``;
+      this.$store.commit("logout");
+      this.$router.push("/login");
     },
   },
   created() {
@@ -72,6 +86,10 @@ export default {
       this.interviewYears = response.data.map((el) => {
         return { value: el.interview_year, text: el.interview_year };
       });
+    });
+    this.$axios.get("/user/whoiam").then((res) => {
+      console.log(res.data.name);
+      this.$store.commit("setName", res.data.name);
     });
   },
 };

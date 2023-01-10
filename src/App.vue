@@ -3,11 +3,14 @@
 </template>
 
 <script>
-import variables from "./assets/scss/_export.module.scss";
-
 export default {
-  setup() {
-    console.log(variables);
+  created() {
+    if (localStorage.getItem("token")) {
+      this.$axios.defaults.headers.common[
+        "x-access-token"
+      ] = `${localStorage.getItem("token")}`;
+      this.$store.commit("login", localStorage.getItem("username"));
+    }
   },
 };
 </script>
