@@ -6,6 +6,7 @@ import Selection from "@/components/Selection";
 import Scheduling from "@/components/Scheduling";
 import Interview from "@/components/Interview";
 import UserManagement from "@/components/UserManagement";
+import UserSetting from "@/components/UserSetting";
 import store from "@/store/index";
 const routes = [
   {
@@ -32,6 +33,10 @@ const routes = [
       {
         path: "/interview",
         component: Interview,
+      },
+      {
+        path: "/usersetting",
+        component: UserSetting,
       },
       {
         beforeEnter: (to, from, next) => {

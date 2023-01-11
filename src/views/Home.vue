@@ -4,7 +4,8 @@
       class="i-flex i-flex-align-center home__selection"
       v-if="
         $router.currentRoute._value.fullPath != '/AddYear' &&
-        $router.currentRoute._value.fullPath != '/usermanagment'
+        $router.currentRoute._value.fullPath != '/usermanagment' &&
+        $router.currentRoute._value.fullPath != '/usersetting'
       "
     >
       <span>انتخاب سال مصاحبه:</span>
@@ -36,10 +37,8 @@
         <!-- it should replaced with name -->
       </div>
       <div dir="rtl" class="i-flex home__menu-item" @click="logout">
-        <img
-          class="home__menu-logout"
-          src="../assets/images/logout.svg"
-          alt=""
+        <i
+          class="i-flex i-flex-align-center bi bi-box-arrow-right home__menu-icon"
         />
         خروج
       </div>
@@ -48,8 +47,20 @@
         class="i-flex home__menu-item"
         @click="$router.push('AddYear'), (this.userMenu = false)"
       >
-        <img class="home__menu-icon" src="../assets/images/plus.svg" alt="" />
-        افزودن مصاحبه
+        <i
+          class="i-flex i-flex-align-center bi bi-folder-plus home__menu-icon"
+        />
+        مصاحبه جدید
+      </div>
+      <div
+        dir="rtl"
+        class="i-flex home__menu-item"
+        @click="$router.push('usersetting'), (this.userMenu = false)"
+      >
+        <i
+          class="i-flex i-flex-align-center bi bi-person-gear home__menu-icon home__menu-icon--larger"
+        />
+        ویرایش پروفایل
       </div>
     </div>
   </div>
@@ -88,8 +99,8 @@ export default {
       });
     });
     this.$axios.get("/user/whoiam").then((res) => {
-      console.log(res.data.name);
       this.$store.commit("setName", res.data.name);
+      this.$store.commit("setIsAdmin", res.data.admin);
     });
   },
 };
@@ -123,23 +134,23 @@ export default {
     top: 47px;
     background: var(--color-3);
     color: var(--on-color-3);
-    width: 150px;
+    width: 160px;
     z-index: 5;
     border-radius: 5px;
     border: 0.5px solid var(--highlight-color);
     &-item {
       padding: 10px;
+      font-size: fontSize("l");
       &:hover {
-        font-weight: bold;
+        text-shadow: var(--highlight-light-color) -2px 2px 2.6px;
       }
     }
     &-icon {
-      width: 10px;
       margin-left: 10px;
-    }
-    &-logout {
-      margin-left: 10px;
-      width: 20px;
+      font-size: fontSize("l");
+      &--larger {
+        font-size: fontSize("xl");
+      }
     }
   }
   &__selection {
