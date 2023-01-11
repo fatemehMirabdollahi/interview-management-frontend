@@ -6,6 +6,7 @@ export default createStore({
     isLogin: false,
     username: null,
     proName: "",
+    isAdmin: false,
   },
   mutations: {
     setInterviewYear(state, year) {
@@ -23,6 +24,9 @@ export default createStore({
     },
     setName(state, proName) {
       state.proName = proName;
+    },
+    setIsAdmin(state, isAdmin) {
+      state.isAdmin = isAdmin;
     },
   },
   actions: {},

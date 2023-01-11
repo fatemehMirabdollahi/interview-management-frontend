@@ -129,3 +129,16 @@ img {
   -webkit-user-select: none;
   -ms-user-select: none;
 }
+
+.delete-form {
+  min-width: 440px;
+  min-height: 175px;
+  padding: 32px;
+  & > span {
+    font-size: 20px;
+    color: var(--on-color-3);
+  }
+  &__buttons {
+    margin: 0 10%;
+  }
+}

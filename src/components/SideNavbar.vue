@@ -6,16 +6,20 @@
     <div
       class="i-flex-column i-flex-1 i-flex-align-center i-flex-justify-center side-navbar__menu"
     >
-      <div class="i-flex i-flex side-navbar__item" @click="open('Selection')">
+      <div class="i-flex i-flex side-navbar__item" @click="open('selection')">
         <span>غربالگری</span>
       </div>
       <div class="i-flex i-flex side-navbar__item" @click="open('scheduling')">
         <span>زمانبندی</span>
       </div>
-      <div class="i-flex i-flex side-navbar__item" @click="open('Interview')">
+      <div class="i-flex i-flex side-navbar__item" @click="open('interview')">
         <span>مصاحبه</span>
       </div>
-      <div class="i-flex i-flex side-navbar__item" @click="open('Selection')">
+      <div
+        class="i-flex i-flex side-navbar__item"
+        @click="open('usermanagment')"
+        v-if="this.$store.state.isAdmin"
+      >
         <span>مدیریت کاربر</span>
       </div>
     </div>

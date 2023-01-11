@@ -469,16 +469,4 @@ export default {
     margin: 0 25%;
   }
 }
-.delete-form {
-  min-width: 500px;
-  min-height: 200px;
-  padding: 32px;
-  & > span {
-    font-size: 20px;
-    color: var(--on-color-3);
-  }
-  &__buttons {
-    margin: 0 15%;
-  }
-}
 </style>

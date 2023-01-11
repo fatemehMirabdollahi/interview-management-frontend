@@ -5,11 +5,17 @@ import AddYear from "@/components/AddYear";
 import Selection from "@/components/Selection";
 import Scheduling from "@/components/Scheduling";
 import Interview from "@/components/Interview";
+import UserManagement from "@/components/UserManagement";
+import store from "@/store/index";
 const routes = [
   {
     path: "/",
     name: "Home",
     component: Home,
+    beforeEnter: (to, from, next) => {
+      if (!store.state.isLogin) next("/login");
+      else next();
+    },
     children: [
       {
         path: "/addYear",
@@ -27,12 +33,23 @@ const routes = [
         path: "/interview",
         component: Interview,
       },
+      {
+        beforeEnter: (to, from, next) => {
+          if (store.state.isAdmin) next();
+        },
+        path: "/usermanagment",
+        component: UserManagement,
+      },
     ],
   },
   {
     path: "/login",
     name: "Login",
     component: Login,
+    beforeEnter: (to, from, next) => {
+      if (store.state.isLogin) next("/");
+      else next();
+    },
   },
 ];
 
