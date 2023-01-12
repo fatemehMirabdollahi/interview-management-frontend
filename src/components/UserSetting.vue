@@ -72,12 +72,14 @@ export default {
     },
   },
   watch: {
-    proName() {
-      this.name = this.proName;
+    proName(proname) {
+      console.log(proname);
+      this.name = proname;
     },
   },
   created() {
     this.username = this.$store.state.username;
+    this.name = this.$store.state.proName;
   },
   methods: {
     confirmEdit() {
@@ -89,12 +91,20 @@ export default {
             this.newPassConf &&
             this.newPass == this.newPassConf)
         ) {
-          this.$axios.put("/user/self", {
-            username: this.username,
-            name: this.name,
-            oldPass: this.oldPass,
-            newPass: this.newPass,
-          });
+          this.$axios
+            .put("/user/self", {
+              oldUsername: this.$store.state.username,
+              username: this.username,
+              name: this.name,
+              oldPass: !this.isCol ? this.oldPass : "",
+              newPass: !this.isCol ? this.newPass : "",
+            })
+            .then((res) => {
+              this.$store.commit("setName", res.data.name);
+              this.$store.commit("login", res.data.username);
+              localStorage.setItem("token", res.data.token);
+              localStorage.setItem("username", res.data.username);
+            });
         }
       }
     },
@@ -107,7 +117,6 @@ export default {
   height: 100%;
   &__container {
     border: 1px solid var(--color-3);
-    padding: 40px 80px;
     width: 60%;
     border-radius: 10px;
     box-shadow: 5px 5px 10px 1px var(--color-3);
