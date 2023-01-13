@@ -7,7 +7,10 @@
         class="i-flex i-flex-align-center selection__option-field"
         @click="editMode = !editMode"
       >
-        <edit-icon class="i-flex" :color="editMode ? '#394454' : '#bbbfca'" />
+        <i
+          class="i-flex i-flex-align-center bi bi-pencil-square"
+          :style="{ color: editMode ? 'var(--color-3)' : 'var(--color-2)' }"
+        />
       </div>
       <div class="i-flex i-flex-align-center selection__filter--select">
         <span>وضعیت:</span>
@@ -83,10 +86,8 @@
           style="flex: 1"
           @click="openDetailModal(row)"
         >
-          <img
-            class="selection__table-more"
-            src="../assets/images/more.svg"
-            alt=""
+          <i
+            class="i-flex i-flex-align-center bi bi-three-dots selection__table-more"
           />
         </div>
       </div>
@@ -123,11 +124,11 @@
 </template>
 
 <script>
-import EditIcon from "./icons/EditIcon";
+// import EditIcon from "./icons/EditIcon";
 import FormButton from "./FormButton";
 import Modal from "./ModalWindow";
 export default {
-  components: { EditIcon, FormButton, Modal },
+  components: { FormButton, Modal },
   computed: {
     filteredStudents() {
       if (this.selectionMode == "both") return this.students;
@@ -307,6 +308,7 @@ export default {
     align-self: flex-start;
     &-field {
       cursor: pointer;
+      font-size: fontSize("xxl");
     }
   }
   &__table {
@@ -346,9 +348,9 @@ export default {
     }
     &-more {
       cursor: pointer;
-      width: 15px;
+      font-size: fontSize("xl");
       &:hover {
-        width: 17px;
+        font-size: fontSize("xxl");
       }
     }
   }
@@ -382,7 +384,7 @@ export default {
   }
   &__filter {
     &--select {
-      margin-right: 24px;
+      margin-right: 16px;
       & > span {
         margin-left: 8px;
       }

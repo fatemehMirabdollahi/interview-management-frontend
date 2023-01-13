@@ -1,10 +1,7 @@
 <template>
   <div class="scheduling i-flex-column" v-if="!showCalender">
-    <img
-      class="scheduling__refresh"
-      width="48"
-      height="48"
-      src="../assets/images/refresh.svg"
+    <i
+      class="scheduling__refresh bi bi-arrow-counterclockwise"
       v-if="changed && interviewYear"
       @click="refresh"
     />
@@ -192,20 +189,13 @@
   <div v-else>
     <div class="i-flex-column i-flex-align-center">
       <div class="i-flex i-width-1-1 i-flex-justify-end">
-        <img
-          class="scheduling__back"
-          width="40"
-          src="../assets/images/back.svg"
-          alt=""
-          srcset=""
-          @click="(showCalender = false), refresh('calender')"
-        />
-        <img
-          class="scheduling__back"
-          width="48"
-          height="48"
-          src="../assets/images/refresh.svg"
+        <i
+          class="i-flex i-flex-align-center scheduling__back bi bi-arrow-counterclockwise"
           @click="refresh('calender')"
+        />
+        <i
+          class="i-flex i-flex-align-center scheduling__back bi bi-escape"
+          @click="(showCalender = false), refresh('calender')"
         />
       </div>
 
@@ -303,12 +293,7 @@
             position: relative;
           "
         >
-          <img
-            class="report__logo"
-            src="../assets/images/black_logo.svg"
-            alt=""
-          />
-
+          <i class="report__logo bi bi-escape" />
           <span class="report__title--first">بسم تعالی</span>
           <span class="report__title--seconde"
             >زمان بندی مصاحبه های سال ۱۴۰۰</span
@@ -773,9 +758,14 @@ $page-width: 297mm;
     }
   }
   &__back {
-    margin: 10px;
+    font-size: 38px;
+    margin: 10px 8px;
     &:last-child {
-      margin-left: 50px;
+      margin-left: 60px;
+      font-size: 34px;
+    }
+    &:hover {
+      text-shadow: var(--highlight-color) 1px 1px 2px;
     }
     cursor: pointer;
   }
@@ -783,9 +773,9 @@ $page-width: 297mm;
     position: absolute;
     left: 0;
     cursor: pointer;
+    font-size: 38px;
     &:hover {
-      width: 50px;
-      height: 50px;
+      text-shadow: var(--highlight-color) 1px 1px 2px;
     }
   }
 }

@@ -10,12 +10,7 @@
         type="text"
         v-model="datetime"
       />
-      <img
-        class="icon"
-        src="../assets/images/calendar_3.svg"
-        alt=""
-        @click="$emit('esc')"
-      />
+      <i class="icon bi bi-calendar2-week" @click="$emit('esc')" />
     </div>
     <picker
       format="X"
@@ -140,9 +135,12 @@ input {
 .icon {
   position: relative;
   left: 39px;
-  height: 40px;
+  font-size: 40px;
 }
 .picker__box {
   position: relative;
+  &:hover {
+    text-shadow: var(--highlight-color) 1px 1px 2px;
+  }
 }
 </style>

@@ -1,12 +1,7 @@
 <template>
   <div class="i-flex-1 i-flex-column i-flex-justify-center addYear">
     <div class="i-flex addYear__add" @click="uploadForm = true">
-      <img
-        class="i-flex addYear__add__icon"
-        src="../assets/images/add.svg"
-        alt=""
-      />
-
+      <i class="i-flex i-flex-align-center bi bi-folder-plus home__menu-icon" />
       <span class="i-flex addYear__add-text"
         >اضافه کردن سال جدید جهت مصاحبه</span
       >
@@ -22,7 +17,7 @@
           استعداد درخشان
         </div>
         <div class="i-flex i-flex-align-center" style="flex: 4">کنکور</div>
-        <div class="i-flex i-flex-align-center" style="flex: 1"></div>
+        <div class="i-flex i-flex-align-center" style="flex: 2"></div>
       </div>
       <div
         class="addYear__table__row i-flex"
@@ -45,20 +40,16 @@
           {{ row.students_number - row.talent }}
         </div>
         <div
-          class="i-flex i-flex-align-center i-flex-justify-between"
-          style="flex: 1"
+          class="i-flex i-flex-align-center i-flex-justify-even"
+          style="flex: 2"
         >
-          <img
-            class="addYear__table-icon"
-            src="../assets/images/delete.svg"
-            alt=""
-            @click="selectDelete(row.year)"
-          />
-          <img
-            class="addYear__table-icon"
-            src="../assets/images/edit.svg"
-            alt=""
+          <i
+            class="i-flex bi bi-pencil-square addYear__table-icon"
             @click="editUploaded(row.year)"
+          />
+          <i
+            class="i-flex bi bi-trash3 addYear__table-icon"
+            @click="selectDelete(row.year)"
           />
         </div>
       </div>
@@ -83,10 +74,8 @@
               class="upload-form__button upload-form__button-delete i-flex i-flex-justify-center"
               v-if="filesName['konkur']"
             >
-              <img
-                class="upload-form__button-delete-icon"
-                src="../assets/images/delete.svg"
-                alt=""
+              <i
+                class="i-flex i-flex-align-center bi bi-trash3 upload-form__button-delete-icon"
                 @click="deleteUploaded('konkur')"
               />
             </label>
@@ -94,10 +83,8 @@
               class="upload-form__button i-flex i-flex-justify-center"
               for="file-input"
             >
-              <img
-                class="upload-form__button__icon"
-                src="../assets/images/upload.svg"
-                alt=""
+              <i
+                class="i-flex i-flex-align-center upload-form__button__icon bi bi-cloud-arrow-up"
               />
             </label>
           </div>
@@ -111,10 +98,8 @@
               class="upload-form__button upload-form__button-delete i-flex i-flex-justify-center"
               v-if="filesName['talent']"
             >
-              <img
-                class="upload-form__button-delete-icon"
-                src="../assets/images/delete.svg"
-                alt=""
+              <i
+                class="i-flex i-flex-align-center bi bi-trash3 upload-form__button-delete-icon"
                 @click="deleteUploaded('talent')"
               />
             </label>
@@ -122,10 +107,8 @@
               class="upload-form__button i-flex i-flex-justify-center"
               for="file-input2"
             >
-              <img
-                class="upload-form__button__icon"
-                src="../assets/images/upload.svg"
-                alt=""
+              <i
+                class="i-flex i-flex-align-center upload-form__button__icon bi bi-cloud-arrow-up"
               />
             </label>
           </div>
@@ -219,7 +202,14 @@ export default {
   },
   computed: {
     studentsNumber() {
-      return 10;
+      let number = 0;
+      if (this.sheetData["konkur"]) {
+        number += this.sheetData["konkur"].length;
+      }
+      if (this.sheetData["talent"]) {
+        number += this.sheetData["talent"].length;
+      }
+      return number;
     },
   },
   methods: {
@@ -384,14 +374,13 @@ export default {
         background-color: var(--on-color-3);
       }
       &:hover {
-        text-shadow: var(--highlight-color) 1px 1px 2px;
       }
     }
     &-icon {
       cursor: pointer;
-      width: 20px;
+      font-size: fontSize("xxl");
       &:hover {
-        width: 22px;
+        text-shadow: var(--highlight-color) 1px 1px 2px;
       }
     }
   }
@@ -399,15 +388,16 @@ export default {
     align-self: flex-start;
     margin-bottom: 16px;
     cursor: pointer;
+    font-size: fontSize("lg");
+
     &:hover {
       text-shadow: var(--highlight-color) 1.95px 1.95px 2.6px;
     }
-    &__icon {
-      margin-left: 16px;
-      width: 25px;
+    & > i {
+      font-size: fontSize("xl");
     }
     &-text {
-      font-size: 18px;
+      margin-right: 8px;
     }
   }
 }
@@ -442,7 +432,8 @@ export default {
     margin-right: 16px;
     cursor: pointer;
     &__icon {
-      width: 26px;
+      color: var(--color-3);
+      font-size: fontSize("xxl");
     }
     &:hover {
       box-shadow: var(--highlight-light-color) 1.95px 1.95px 2.6px;
@@ -454,7 +445,8 @@ export default {
       width: 30px;
       height: 30px;
       &-icon {
-        width: 20px;
+        color: var(--color-3);
+        font-size: fontSize("lg");
       }
     }
   }

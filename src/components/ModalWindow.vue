@@ -8,10 +8,8 @@
       <div class="themodal i-flex-column">
         <div class="i-flex i-flex-justify-between themodal__header">
           <span class="themodal__header-title">{{ title }}</span>
-          <img
-            class="themodal__header-close"
-            src="../assets/images/close.svg"
-            alt=""
+          <i
+            class="i-flex bi bi-x themodal__header-close"
             @click="$emit('esc')"
           />
         </div>
@@ -97,7 +95,7 @@ export default {
     font-size: 20px;
   }
   &-close {
-    width: 10px;
+    font-size: fontSize("sl");
     cursor: pointer;
   }
 }

@@ -13,6 +13,7 @@
         <b-form-select
           :options="interviewYears"
           @change="setInterviewYear"
+          v-model="activeYear"
         ></b-form-select>
       </div>
     </div>
@@ -23,12 +24,9 @@
   </div>
   <div class="home__user" v-click-outside="closeMenu">
     <div class="i-flex" @click="userMenu = !userMenu">
-      <img
-        class="home__user-arrow"
-        src="../assets/images/dropdown.svg"
-        alt=""
+      <i
+        class="i-flex i-flex-align-center home__user-icon bi bi-person-lines-fill"
       />
-      <img class="home__user-icon" src="../assets/images/user.svg" alt="" />
     </div>
 
     <div class="home__menu" v-if="userMenu">
@@ -76,6 +74,7 @@ export default {
       activePage: "AddYear",
       userMenu: false,
       interviewYears: [],
+      activeYear: {},
     };
   },
   components: { Navbar },
@@ -84,6 +83,7 @@ export default {
       this.userMenu = false;
     },
     setInterviewYear(el) {
+      this.activeYear = el;
       this.$store.commit("setInterviewYear", el);
     },
     logout() {
@@ -115,16 +115,17 @@ export default {
   }
   &__user {
     position: absolute;
-    left: 20px;
-    top: 20px;
+    left: 32px;
+    top: 32px;
     cursor: pointer;
+
     &-icon {
-      width: 40px;
-      height: 40px;
+      font-size: 42px;
+      color: var(--color-3);
     }
-    &-arrow {
-      width: 30px;
-      height: 3 0px;
+    height: 3 0px;
+    &:hover {
+      text-shadow: var(--highlight-color) 1px 1px 2px;
     }
   }
   &__menu {
