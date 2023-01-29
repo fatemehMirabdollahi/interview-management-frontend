@@ -30,7 +30,10 @@
     </div>
 
     <div class="home__menu" v-if="userMenu">
-      <div class="i-flex i-flex-justify-center home__menu-item">
+      <div
+        class="i-flex i-flex-justify-center home__menu-item"
+        style="cursor: default"
+      >
         {{ $store.state.proName }}
         <!-- it should replaced with name -->
       </div>

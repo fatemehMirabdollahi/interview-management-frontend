@@ -66,6 +66,7 @@ export default {
   background-color: var(--color-3);
   box-shadow: 2px 2px 5px #65616165;
   border-radius: 10px;
+  max-height: 90vh;
 }
 .themodal-backdrop {
   position: fixed;

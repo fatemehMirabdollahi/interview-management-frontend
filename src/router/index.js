@@ -7,6 +7,7 @@ import Scheduling from "@/components/Scheduling";
 import Interview from "@/components/Interview";
 import UserManagement from "@/components/UserManagement";
 import UserSetting from "@/components/UserSetting";
+import Assessment from "@/components/Assessment";
 import store from "@/store/index";
 const routes = [
   {
@@ -37,6 +38,10 @@ const routes = [
       {
         path: "/usersetting",
         component: UserSetting,
+      },
+      {
+        path: "/assessment",
+        component: Assessment,
       },
       {
         beforeEnter: (to, from, next) => {

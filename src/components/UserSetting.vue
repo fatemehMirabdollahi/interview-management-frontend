@@ -104,6 +104,11 @@ export default {
               this.$store.commit("login", res.data.username);
               localStorage.setItem("token", res.data.token);
               localStorage.setItem("username", res.data.username);
+              this._vm.$bvToast.toast("Toast body content", {
+                title: `Variant ${"success" || "default"}`,
+                variant: "success",
+                solid: true,
+              });
             });
         }
       }

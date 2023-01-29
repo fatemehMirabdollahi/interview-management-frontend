@@ -1,7 +1,13 @@
 <template>
   <div
     class="i-flex-1 i-flex-column field__body"
-    :class="theme == 'light' ? 'field__body--light' : ''"
+    :class="
+      theme == 'light'
+        ? 'field__body--light'
+        : theme == 'contrast'
+        ? 'field__body--contrast'
+        : ''
+    "
     :style="{ opacity: disabled ? '0.5' : '1' }"
   >
     <span v-if="label" class="field__label">{{ label }} :</span>
@@ -20,6 +26,7 @@
           {
             'input-selected': selected,
             'input--light': theme == 'light',
+            'input--contrast': theme == 'contrast',
             'input-error': error,
           },
         ]"
@@ -126,6 +133,19 @@ $field-height: 40px;
       // border: 2px solid var(--highlight-light-color);
       box-shadow: var(--highlight-light-color) 1.95px 1.95px 2.6px;
       border: none;
+    }
+  }
+  &--contrast {
+    background-color: transparent;
+    color: var(--on-color-1);
+    border: solid 1px var(--color-3);
+    &:focus {
+      border: solid 1px var(--color-3);
+      box-shadow: var(--highlight-light-color) 1.95px 1.95px 2.6px;
+    }
+    &:hover {
+      border: solid 1px var(--color-3);
+      box-shadow: var(--highlight-light-color) 1.95px 1.95px 2.6px;
     }
   }
   &-error {
