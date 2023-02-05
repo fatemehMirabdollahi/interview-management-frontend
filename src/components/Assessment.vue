@@ -16,7 +16,7 @@
         class="assessment__table__row i-flex"
         v-for="(row, index) in students"
         :key="index"
-        @click="openForm(row)"
+        @click="openForm(row.docnumber)"
       >
         <div class="i-flex i-flex-align-center" style="flex: 2">
           {{ index + 1 }}
@@ -94,7 +94,7 @@
                 type="text"
                 theme="contrast"
                 style="max-width: 50px"
-                v-model="row.maxValue"
+                v-model="row.max"
               />
             </div>
             <div
@@ -113,14 +113,6 @@
               style="flex: 4"
             >
               <Input
-                v-if="index != 0"
-                type="text"
-                theme="contrast"
-                style="max-width: 50px"
-                v-model="row.grade"
-              />
-              <Input
-                v-if="index == 0"
                 type="text"
                 theme="contrast"
                 style="max-width: 50px"
@@ -209,7 +201,7 @@
                 type="text"
                 theme="contrast"
                 style="max-width: 50px"
-                v-model="row.maxValue"
+                v-model="row.max"
               />
             </div>
             <div
@@ -220,7 +212,7 @@
                 type="text"
                 theme="contrast"
                 style="max-width: 200px"
-                v-model="row.desc"
+                v-model="row.how"
               />
             </div>
             <div
@@ -231,7 +223,7 @@
                 type="text"
                 theme="contrast"
                 style="max-width: 50px"
-                v-model="row.grade"
+                v-model="row.grade[0]"
               />
             </div>
           </div>
@@ -279,80 +271,9 @@ export default {
     return {
       showForm: false,
       students: [],
-      form_1: [
-        {
-          title: [
-            "۱-۱ مقالات علمی - پژوهشی (داخلی و خارجی) مرتبط با رشته تحصیلی",
-            "۱-۲ گواهی ثبت اختراع مورد تایید سازمان پژوهش های علمی و صنعتی ایران",
-            "۱-۳ برگزیدگی در جشنواره های علمی معتبر",
-          ],
-          maxValue: "",
-          decs: "",
-          grade: ["", "", ""],
-        },
-        {
-          title: ["مقالات علمی-ترویجی مرتبط با رشته تحصیلی"],
-          maxValue: "",
-          desc: "",
-          grade: "",
-        },
-        {
-          title: ["مقالات چاپ شده در کنفرانس های معتبر (داخلی و خارجی)"],
-          maxValue: "",
-          desc: "",
-          grade: "",
-        },
-        {
-          title: ["تالیف یا ترجمه کتاب مرتبط با رشته تحصیلی"],
-          maxValue: "",
-          desc: "",
-          grade: "",
-        },
-        {
-          title: ["معدل و کیفیت دانشگاه محل تحصیل"],
-          maxValue: "",
-          desc: "",
-          grade: "",
-        },
-        {
-          title: ["برگزیدگان المپیادهای علمی - دانشجویی"],
-          maxValue: "",
-          desc: "",
-          grade: "",
-        },
-        {
-          title: ["مدرک زبان معتبر"],
-          maxValue: "",
-          desc: "",
-          grade: "",
-        },
-        {
-          title: ["سایر موارد مورد نظر دانشگاه"],
-          maxValue: "",
-          desc: "",
-          grade: "",
-        },
-      ],
-      form_2: [
-        {
-          title: ["آزمون شفاهی و یا کتبی"],
-          maxValue: "",
-          desc: "",
-          grade: "",
-        },
-        {
-          title: ["مصاحبه تخصصی"],
-          maxValue: "",
-          desc: "",
-          grade: "",
-        },
-        {
-          title: ["نظر اساتید راهنما"],
-          maxValue: "",
-          desc: "",
-          grade: "",
-        },
-      ],
+      form_1: [],
+      form_2: [],
+      selectedDocnumber: null,
     };
   },
   computed: {
@@ -361,13 +282,13 @@ export default {
     },
     maxValueSum_1() {
       const sum = this.form_1.reduce((accumulator, object) => {
-        return accumulator + Number(object.maxValue);
+        return accumulator + Number(object.max);
       }, 0);
       return sum;
     },
     maxValueSum_2() {
       const sum = this.form_2.reduce((accumulator, object) => {
-        return accumulator + Number(object.maxValue);
+        return accumulator + Number(object.max);
       }, 0);
       return sum;
     },
@@ -381,11 +302,10 @@ export default {
       let sum = 0;
       for (let index = 0; index < this.form_1.length; index++) {
         const element = this.form_1[index].grade;
-        if (index == 0) {
-          sum += Number(element[0]) + Number(element[1]) + Number(element[2]);
-        } else {
-          sum += Number(element);
-        }
+        console.log(element);
+        sum += element.reduce((accumulator, object) => {
+          return accumulator + Number(object);
+        }, 0);
       }
       return sum;
     },
@@ -396,39 +316,115 @@ export default {
     },
   },
   created() {
-    this.getInterviewStudents();
+    if (this.interviewYear) this.getInterviewStudents();
   },
   methods: {
     getInterviewStudents() {
       this.$axios.get(`/interview/ ${this.interviewYear}`).then((response) => {
         this.students = response.data;
       });
+      this.$axios.get("/assessment/fields").then((response) => {
+        this.titles = response.data;
+        this.form1_titles = this.titles.filter((el) => el.formnum == 1);
+        this.form2_titles = this.titles.filter((el) => el.formnum == 2);
+      });
     },
-    openForm() {
+    openForm(docnumber) {
       this.showForm = true;
+      this.selectedDocnumber = docnumber;
+      this.$axios.get(`/assessment/student/${docnumber}`).then((res) => {
+        console.log(res);
+        let form1 = res.data.filter((el) => el.formnum == 1);
+        let form2 = res.data.filter((el) => el.formnum == 2);
+        for (let index = 0; index < this.form1_titles.length; index++) {
+          const elementTitle = this.form1_titles[index];
+          let findField = form1.find(
+            (el) => el.fieldnum == elementTitle.fieldnum
+          );
+          if (findField) {
+            this.form_1.push({
+              title: elementTitle.name,
+              max: findField.max,
+              how: findField.how,
+              grade: findField.grade,
+              fieldnum: elementTitle.fieldnum,
+            });
+          } else {
+            this.form_1.push({
+              title: elementTitle.name,
+              max: "",
+              how: "",
+              grade: Array(elementTitle.name.length).fill(""),
+              fieldnum: elementTitle.fieldnum,
+            });
+          }
+        }
+        for (let index = 0; index < this.form2_titles.length; index++) {
+          const elementTitle = this.form2_titles[index];
+          let findField = form2.find(
+            (el) => el.fieldnum == elementTitle.fieldnum
+          );
+          if (findField) {
+            this.form_2.push({
+              title: elementTitle.name,
+              max: findField.max,
+              how: findField.how,
+              grade: findField.grade,
+              fieldnum: elementTitle.fieldnum,
+            });
+          } else {
+            this.form_2.push({
+              title: elementTitle.name,
+              max: "",
+              how: "",
+              grade: Array(elementTitle.name.length).fill(""),
+              fieldnum: elementTitle.fieldnum,
+            });
+          }
+        }
+      });
     },
     closeForm() {
-      for (let index = 0; index < this.form_1.length; index++) {
-        const element = this.form_1[index];
-        if (index == 0) {
-          element.grade[0] = "";
-          element.grade[1] = "";
-          element.grade[2] = "";
-        } else {
-          element.grade = "";
-        }
-        element.maxValue = "";
-        element.desc = "";
-      }
-      for (const item of this.form_2) {
-        item.maxValue = "";
-        item.grade = "";
-        item.desc = "";
-      }
+      this.form_1 = [];
+      this.form_2 = [];
       this.showForm = false;
     },
     applyAssessment() {
       this.showForm = false;
+      let fields = [
+        ...this.form_1.map((el) => {
+          return {
+            grade: el.grade.map((el) => (el === "" ? null : Number(el))),
+            max: el.max,
+            how: el.how,
+            formnum: 1,
+            fieldnum: el.fieldnum,
+          };
+        }),
+        ...this.form_2.map((el) => {
+          return {
+            grade: el.grade.map((el) => (el === "" ? null : Number(el))),
+            max: el.max,
+            how: el.how,
+            formnum: 2,
+            fieldnum: el.fieldnum,
+          };
+        }),
+      ];
+      fields = fields.filter((el) => {
+        return el.max !== "" && el.grade.indexOf(null) == -1;
+      });
+      console.log(fields);
+      if (fields.length)
+        this.$axios
+          .post(`/assessment/student/${this.selectedDocnumber}`, {
+            fields,
+          })
+          .then((res) => {
+            console.log(res);
+            this.form_1 = [];
+            this.form_2 = [];
+          });
     },
   },
 };
