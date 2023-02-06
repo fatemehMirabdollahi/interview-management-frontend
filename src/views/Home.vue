@@ -33,6 +33,7 @@
       <div
         class="i-flex i-flex-justify-center home__menu-item"
         style="cursor: default"
+        dir="rtl"
       >
         {{ $store.state.proName }}
         <!-- it should replaced with name -->
@@ -46,6 +47,7 @@
       <div
         dir="rtl"
         class="i-flex home__menu-item"
+        v-if="this.$store.state.isAdmin"
         @click="$router.push('AddYear'), (this.userMenu = false)"
       >
         <i

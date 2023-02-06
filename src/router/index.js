@@ -20,6 +20,9 @@ const routes = [
     },
     children: [
       {
+        beforeEnter: (to, from, next) => {
+          if (store.state.isAdmin) next();
+        },
         path: "/addYear",
         component: AddYear,
       },
@@ -40,6 +43,9 @@ const routes = [
         component: UserSetting,
       },
       {
+        beforeEnter: (to, from, next) => {
+          if (store.state.isAdmin) next();
+        },
         path: "/assessment",
         component: Assessment,
       },
