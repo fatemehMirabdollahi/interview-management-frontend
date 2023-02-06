@@ -15,7 +15,11 @@
       <div class="i-flex i-flex side-navbar__item" @click="open('interview')">
         <span>مصاحبه</span>
       </div>
-      <div class="i-flex i-flex side-navbar__item" @click="open('assessment')">
+      <div
+        class="i-flex i-flex side-navbar__item"
+        @click="open('assessment')"
+        v-if="this.$store.state.isAdmin"
+      >
         <span>ارزیابی</span>
       </div>
       <div

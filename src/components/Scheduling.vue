@@ -155,14 +155,14 @@
         label="زمانبندی"
         :size="{ width: 100, height: 40 }"
         @i-click="schedule"
-        :disable="students.length == 0 || dates.length == 0 || hasError"
+        :disable="students.length == 0 || dates.length == 0"
       />
       <form-button
         label="نمایش تقویم مصاحبه ها"
         theme="light"
         :size="{ width: 200, height: 40 }"
         @i-click="openCalender"
-        :disable="students.length == 0 || dates.length == 0 || hasError"
+        :disable="students.length == 0 || dates.length == 0"
       />
     </div>
     <div class="i-flex i-flex-justify-center">
@@ -377,6 +377,8 @@ import FieldTextInput from "./FieldTextInput";
 import FormButton from "./FormButton";
 import interviewCard from "./InterviewCard";
 import Vue3Html2pdf from "vue3-html2pdf";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 export default {
   components: {
@@ -485,6 +487,30 @@ export default {
         .then((response) => {
           this.students = response.data;
         });
+      this.startTime = {
+        hour: 8,
+        minute: 0,
+      };
+      this.endTime = {
+        hour: 15,
+        minute: 0,
+      };
+      this.interviewLength = 30;
+      this.rest = 5;
+      this.gapStar = {
+        hour: 12,
+        minute: 0,
+      };
+      this.gapEnd = {
+        hour: 13,
+        minute: 30,
+      };
+      this.scheduledInterviewNum = 0;
+      this.interviews = {};
+      this.timesPerDay = [];
+      this.interviewsPerDaySchedule = [];
+      this.changed = false;
+      this.dates = [];
     },
     getInterviewData(input) {
       if (this.interviewYear)
@@ -570,6 +596,12 @@ export default {
       }
     },
     schedule() {
+      console.log(document.getElementsByClassName("error-icon"));
+      if (document.getElementsByClassName("error-icon").length > 0) {
+        this.hasError = true;
+        return;
+      }
+      this.hasError = false;
       this.changed = true;
       this.startTime = {
         hour: Number(this.startTime.hour),
@@ -627,7 +659,7 @@ export default {
     },
     fieldChanged() {
       this.changed = true;
-      this.hasError = document.getElementsByClassName("input-error").length > 0;
+      this.hasError = false;
     },
     saveCalender() {
       let interviewData = {
@@ -664,9 +696,19 @@ export default {
       };
       this.$axios
         .post("/meet", data)
-        .then(() => {})
-        .catch((error) => {
-          console.log(error);
+        .then(() => {
+          toast(".زمانبندی با موفقیت ذخیره شد", {
+            autoClose: 2000,
+            position: toast.POSITION.BOTTOM_LEFT,
+            type: "success",
+          });
+        })
+        .catch(() => {
+          toast("!خطا در ذخبره زمانبندی", {
+            autoClose: 2000,
+            position: toast.POSITION.BOTTOM_LEFT,
+            type: "error",
+          });
         });
     },
   },

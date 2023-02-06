@@ -131,6 +131,8 @@ import fieldTextInput from "./FieldTextInput";
 import fieldTextAreaInput from "./FieldTextAreaInput";
 import Button from "./FormButton";
 import BackIcon from "./icons/BackIcon";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 export default {
   components: { fieldTextInput, fieldTextAreaInput, Button, BackIcon },
   data() {
@@ -200,13 +202,28 @@ export default {
       this.showDetails = true;
     },
     submitComment() {
-      this.$axios.post("/comment", {
-        firstimpression: this.firstimpression,
-        opinion: this.opinion,
-        favphdfields: this.favphdfields,
-        username: this.$store.state.username,
-        docnumber: this.docnumber,
-      });
+      this.$axios
+        .post("/comment", {
+          firstimpression: this.firstimpression,
+          opinion: this.opinion,
+          favphdfields: this.favphdfields,
+          username: this.$store.state.username,
+          docnumber: this.docnumber,
+        })
+        .then(() => {
+          toast(".تغییرات با موفقیت اعمال شد", {
+            autoClose: 2000,
+            position: toast.POSITION.BOTTOM_LEFT,
+            type: "success",
+          });
+        })
+        .catch(() => {
+          toast("!خطا در اعمال تغییرات", {
+            autoClose: 2000,
+            position: toast.POSITION.BOTTOM_LEFT,
+            type: "error",
+          });
+        });
     },
   },
 };

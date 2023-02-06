@@ -124,9 +124,10 @@
 </template>
 
 <script>
-// import EditIcon from "./icons/EditIcon";
 import FormButton from "./FormButton";
 import Modal from "./ModalWindow";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 export default {
   components: { FormButton, Modal },
   computed: {
@@ -285,6 +286,25 @@ export default {
         })
         .then(() => {
           this.editMode = false;
+          toast(".تغییرات با موفقیت اعمال شد", {
+            autoClose: 2000,
+            position: toast.POSITION.BOTTOM_LEFT,
+            type: "success",
+          });
+        })
+        .catch(() => {
+          toast("!خطا در اعمال تغییرات", {
+            autoClose: 2000,
+            position: toast.POSITION.BOTTOM_LEFT,
+            type: "error",
+          });
+          this.editMode = false;
+          for (let index = 0; index < this.students.length; index++) {
+            const element = this.students[index];
+            if (this.selectedStudents.includes(element.docnumber))
+              element.selected = true;
+            else element.selected = false;
+          }
         });
     },
     updateChecks() {

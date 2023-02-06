@@ -72,6 +72,8 @@
 <script>
 import FieldTextInput from "./FieldTextInput";
 import Button from "./FormButton";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 export default {
   components: {
     FieldTextInput,
@@ -110,7 +112,8 @@ export default {
           (this.oldPass &&
             this.newPass &&
             this.newPassConf &&
-            this.newPass == this.newPassConf)
+            this.newPass == this.newPassConf &&
+            !document.getElementsByClassName("error-icon").length)
         ) {
           this.$axios
             .put("/user/self", {
@@ -125,10 +128,17 @@ export default {
               this.$store.commit("login", res.data.username);
               localStorage.setItem("token", res.data.token);
               localStorage.setItem("username", res.data.username);
-              this._vm.$bvToast.toast("Toast body content", {
-                title: `Variant ${"success" || "default"}`,
-                variant: "success",
-                solid: true,
+              toast(".تغییرات با موفقیت اعمال شد", {
+                autoClose: 2000,
+                position: toast.POSITION.BOTTOM_LEFT,
+                type: "success",
+              });
+            })
+            .catch(() => {
+              toast("!خطا در اعمال تغییرات", {
+                autoClose: 2000,
+                position: toast.POSITION.BOTTOM_LEFT,
+                type: "error",
               });
             });
         }

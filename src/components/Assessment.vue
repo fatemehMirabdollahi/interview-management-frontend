@@ -287,6 +287,8 @@
 import ModalWindow from "./ModalWindow";
 import Input from "./FieldTextInput";
 import Button from "./FormButton";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 export default {
   components: { ModalWindow, Input, Button },
   data() {
@@ -410,7 +412,6 @@ export default {
       this.showForm = false;
     },
     applyAssessment() {
-      this.showForm = false;
       let fields = [
         ...this.form_1.map((el) => {
           return {
@@ -434,7 +435,10 @@ export default {
       fields = fields.filter((el) => {
         return el.max !== "" && el.grade.indexOf(null) == -1;
       });
-      if (fields.length)
+      if (
+        fields.length &&
+        !document.getElementsByClassName("error-icon").length
+      ) {
         this.$axios
           .post(`/assessment/student/${this.selectedDocnumber}`, {
             fields,
@@ -442,7 +446,22 @@ export default {
           .then(() => {
             this.form_1 = [];
             this.form_2 = [];
+            toast(".تغییرات با موفقیت اعمال شد", {
+              autoClose: 2000,
+              position: toast.POSITION.BOTTOM_LEFT,
+              type: "success",
+            });
+            this.showForm = false;
+          })
+          .catch(() => {
+            toast("!خطا در اعمال تغییرات", {
+              autoClose: 2000,
+              position: toast.POSITION.BOTTOM_LEFT,
+              type: "error",
+            });
+            this.showForm = false;
           });
+      }
     },
   },
 };

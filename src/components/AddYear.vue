@@ -178,6 +178,8 @@ import Button from "./FormButton";
 import FieldTextInput from "./FieldTextInput";
 import ModalWindow from "./ModalWindow";
 import * as XLSX from "xlsx";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 export default {
   components: { Button, FieldTextInput, ModalWindow },
   data() {
@@ -220,11 +222,32 @@ export default {
         students: this.sheetData["konkur"].concat(this.sheetData["talent"]),
         year: this.newYearName,
       };
-      this.$axios.post("/student", body);
-      this.uploadForm = false;
-      this.$axios.get("/interview").then((result) => {
-        this.yearData = result.data;
-      });
+      if (
+        body.students.length &&
+        this.newYearName &&
+        !document.getElementsByClassName("error-icon").length
+      ) {
+        this.$axios
+          .post("/student", body)
+          .then(() => {
+            toast(".تغییرات با موفقیت اعمال شد", {
+              autoClose: 2000,
+              position: toast.POSITION.BOTTOM_LEFT,
+              type: "success",
+            });
+          })
+          .catch(() => {
+            toast("!خطا در اعمال تغییرات", {
+              autoClose: 2000,
+              position: toast.POSITION.BOTTOM_LEFT,
+              type: "error",
+            });
+          });
+        this.uploadForm = false;
+        this.$axios.get("/interview").then((result) => {
+          this.yearData = result.data;
+        });
+      }
       // this.cancel();
     },
     cancel() {

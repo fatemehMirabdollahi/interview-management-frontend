@@ -248,6 +248,8 @@
 import ModalWindow from "./ModalWindow";
 import FieldTextInput from "./FieldTextInput";
 import Button from "./FormButton";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 export default {
   components: { ModalWindow, FieldTextInput, Button },
   data() {
@@ -286,7 +288,8 @@ export default {
         this.newUser.pass &&
         this.newUser.passConf &&
         this.newUser.username &&
-        this.newUser.passConf == this.newUser.pass
+        this.newUser.passConf == this.newUser.pass &&
+        !document.getElementsByClassName("error-icon").length
       ) {
         this.$axios
           .post("/user", {
@@ -297,6 +300,18 @@ export default {
           .then(() => {
             this.getUsers();
             this.showAddMenu = false;
+            toast(".کاربر جدید با موفقیت اضافه شد", {
+              autoClose: 2000,
+              position: toast.POSITION.BOTTOM_LEFT,
+              type: "success",
+            });
+          })
+          .catch(() => {
+            toast("!خطا در افزودن کاربر جدید", {
+              autoClose: 2000,
+              position: toast.POSITION.BOTTOM_LEFT,
+              type: "error",
+            });
           });
       }
     },
@@ -318,10 +333,24 @@ export default {
       this.showEditMenu = false;
     },
     confirmDelete() {
-      this.$axios.delete(`/user/${this.selectedUser.username}`).then((res) => {
-        console.log(res);
-        this.getUsers();
-      });
+      this.$axios
+        .delete(`/user/${this.selectedUser.username}`)
+        .then((res) => {
+          console.log(res);
+          this.getUsers();
+          toast(".کاربر با موفقیت حذف شد", {
+            autoClose: 2000,
+            position: toast.POSITION.BOTTOM_LEFT,
+            type: "success",
+          });
+        })
+        .catch(() => {
+          toast("!خطا در حذف کاربر", {
+            autoClose: 2000,
+            position: toast.POSITION.BOTTOM_LEFT,
+            type: "error",
+          });
+        });
       this.showDeleteMenu = false;
       this.selectedUser = {};
     },
@@ -332,7 +361,8 @@ export default {
         (!this.changePass ||
           (this.selectedUser.pass &&
             this.selectedUser.passConf &&
-            this.selectedUser.passConf == this.selectedUser.pass))
+            this.selectedUser.passConf == this.selectedUser.pass)) &&
+        !document.getElementsByClassName("error-icon").length
       ) {
         this.$axios
           .put("/user", {
@@ -343,6 +373,18 @@ export default {
           })
           .then(() => {
             this.getUsers();
+            toast(".تغییرات با موفقیت اعمال شد", {
+              autoClose: 2000,
+              position: toast.POSITION.BOTTOM_LEFT,
+              type: "success",
+            });
+          })
+          .catch(() => {
+            toast("!خطا در اعمال تغییرات", {
+              autoClose: 2000,
+              position: toast.POSITION.BOTTOM_LEFT,
+              type: "error",
+            });
           });
         this.showEditMenu = false;
         this.selectedUser = {};

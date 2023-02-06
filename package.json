@@ -14,6 +14,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.2.1",
     "@fortawesome/vue-fontawesome": "^3.0.2",
     "@popperjs/core": "^2.11.6",
+    "@vee-validate/rules": "^4.5.10",
     "axios": "^0.21.1",
     "bootstrap": "^5.2.3",
     "bootstrap-icons": "^1.10.3",
@@ -24,6 +25,7 @@
     "moment-jalaali": "^0.9.6",
     "node-sass": "^5.0.0",
     "sass": "^1.32.6",
+    "vee-validate": "^4.5.10",
     "vue": "^3.2.45",
     "vue-class-component": "^8.0.0-0",
     "vue-router": "^4.0.0-alpha.6",
@@ -31,11 +33,9 @@
     "vue3-html2pdf": "^1.1.2",
     "vue3-jalali-moment": "^3.0.1",
     "vue3-persian-datetime-picker": "^1.2.2",
+    "vue3-toastify": "^0.0.6",
     "vuex": "^4.0.0-alpha.1",
-    "xlsx": "^0.18.5",
-    "vee-validate": "^4.5.10",
-    "@vee-validate/rules": "^4.5.10"
-
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.13",
