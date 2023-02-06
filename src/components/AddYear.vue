@@ -63,6 +63,8 @@
           class="upload-form__input"
           label="سال"
           v-model="newYearName"
+          type="number"
+          :rules="['required', 'integer']"
         />
         <div class="upload-form__name i-flex i-flex-justify-between">
           <div>

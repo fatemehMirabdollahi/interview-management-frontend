@@ -44,7 +44,7 @@
         <field-text-input
           type="number"
           v-model="interviewLength"
-          :range="{ min: 5, max: 999 }"
+          :rules="['required', 'isBetween:5,90']"
           @change="fieldChanged"
         />
       </div>
@@ -56,7 +56,7 @@
         <field-text-input
           type="number"
           v-model="rest"
-          :range="{ min: 0, max: 999 }"
+          :rules="['required', 'isBetween:0,90']"
           @change="fieldChanged"
         />
       </div>
@@ -70,7 +70,7 @@
           <field-text-input
             type="number"
             v-model="startTime.minute"
-            :range="{ min: 0, max: 59 }"
+            :rules="['required', 'isBetween:0,59']"
             @change="fieldChanged"
           />
         </div>
@@ -79,7 +79,7 @@
           <field-text-input
             type="number"
             v-model="startTime.hour"
-            :range="{ min: 0, max: 23 }"
+            :rules="['required', 'isBetween:0,23']"
             @change="fieldChanged"
           />
         </div>
@@ -90,7 +90,7 @@
           <field-text-input
             type="number"
             v-model="endTime.minute"
-            :range="{ min: 0, max: 59 }"
+            :rules="['required', 'isBetween:0,59']"
             @change="fieldChanged"
           />
         </div>
@@ -99,7 +99,7 @@
           <field-text-input
             type="number"
             v-model="endTime.hour"
-            :range="{ min: 0, max: 23 }"
+            :rules="['required', 'isBetween:0,23']"
             @change="fieldChanged"
           />
         </div>
@@ -113,7 +113,7 @@
           <field-text-input
             type="number"
             v-model="gapStart.minute"
-            :range="{ min: 0, max: 59 }"
+            :rules="['required', 'isBetween:0,59']"
             @change="fieldChanged"
           />
         </div>
@@ -122,7 +122,7 @@
           <field-text-input
             type="number"
             v-model="gapStart.hour"
-            :range="{ min: 0, max: 23 }"
+            :rules="['required', 'isBetween:0,23']"
             @change="fieldChanged"
           />
         </div>
@@ -133,7 +133,7 @@
           <field-text-input
             type="number"
             v-model="gapEnd.minute"
-            :range="{ min: 0, max: 59 }"
+            :rules="['required', 'isBetween:0,59']"
             @change="fieldChanged"
           />
         </div>
@@ -142,7 +142,7 @@
           <field-text-input
             type="number"
             v-model="gapEnd.hour"
-            :range="{ min: 0, max: 23 }"
+            :rules="['required', 'isBetween:0,23']"
             @change="fieldChanged"
           />
         </div>
@@ -391,22 +391,22 @@ export default {
       students: [],
       dates: [],
       startTime: {
-        hour: null,
-        minute: null,
+        hour: 8,
+        minute: 0,
       },
       endTime: {
-        hour: null,
-        minute: null,
+        hour: 15,
+        minute: 0,
       },
       interviewLength: 30,
-      rest: null,
+      rest: 5,
       gapStart: {
-        hour: null,
-        minute: null,
+        hour: 12,
+        minute: 0,
       },
       gapEnd: {
-        hour: null,
-        minute: null,
+        hour: 13,
+        minute: 30,
       },
       scheduledInterviewNum: 0,
       showCalender: false,

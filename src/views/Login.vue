@@ -12,12 +12,14 @@
           class="login__form-input"
           v-model="username"
           label="نام کاربری"
+          :rules="['required']"
         />
         <field-text-input
           class="login__form-input"
           v-model="password"
           label="رمز عبور"
           type="password"
+          :rules="['required']"
         />
         <form-button
           class="login__form-button"

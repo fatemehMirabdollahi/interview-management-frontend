@@ -15,27 +15,83 @@
       <input
         :value="modelValue"
         @input="$emit('update:modelValue', $event.target.value)"
-        @focus="$emit('focus'), (focused = true)"
+        @focus="$emit('focus'), (focused = true), (clicked = true)"
         @focusout="focused = false"
+        @change="$emit('change')"
         :type="type"
         :disabled="disabled"
         :readonly="readOnly"
         :placeholder="placeholder"
         class="input"
+        :id="id"
         :class="[
           {
             'input-selected': selected,
             'input--light': theme == 'light',
             'input--contrast': theme == 'contrast',
-            'input-error': error,
+            'input-error': hasError && clicked,
           },
         ]"
       />
+      <i
+        v-b-tooltip.hover
+        :title="errorMessage"
+        class="bi bi-exclamation-circle-fill error-icon"
+        v-if="hasError && clicked"
+      ></i>
     </div>
   </div>
 </template>
 <script>
+import { computed, watch, onMounted } from "vue";
+import { useField } from "vee-validate";
+
 export default {
+  emits: ["update:modelValue", "focus", "change"],
+  setup(props) {
+    if (props.type == "number") {
+      const mandatoryValidationRules = [];
+      const validationRules = computed(() => {
+        const rules = props.rules.join("|");
+        if (rules.search(/(double|integer|numeric)/) < 0) {
+          return [...mandatoryValidationRules, ...props.rules].join("|");
+        }
+        return rules;
+      });
+      const { errorMessage, value } = useField("numberField", validationRules);
+      const hasError = computed(() => {
+        return errorMessage.value != undefined;
+      });
+      watch(
+        () => props.modelValue,
+        (newValue) => {
+          value.value = newValue;
+        }
+      );
+
+      return {
+        errorMessage,
+        hasError,
+        value,
+      };
+    } else {
+      const validationRules = [...props.rules].join("|");
+      const { errorMessage, value } = useField("textField", validationRules);
+      const hasError = computed(() => {
+        return errorMessage.value != undefined;
+      });
+      onMounted(() => {
+        value.value = props.modelValue;
+      });
+      watch(
+        () => props.modelValue,
+        (newValue) => {
+          value.value = newValue;
+        }
+      );
+      return { errorMessage, hasError, value };
+    }
+  },
   props: {
     disabled: {
       type: Boolean,
@@ -65,27 +121,19 @@ export default {
     theme: {
       type: String,
     },
-    range: {
-      type: Object,
+    rules: {
+      type: Array,
+      default: () => [],
+    },
+    id: {
+      type: String,
     },
   },
   data() {
     return {
       focused: false,
+      clicked: false,
     };
-  },
-  computed: {
-    error() {
-      if (this.range)
-        if (
-          this.modelValue < this.range.min ||
-          this.modelValue > this.range.max ||
-          (!Number(this.modelValue) && Number(this.modelValue) !== 0)
-        ) {
-          return true;
-        }
-      return false;
-    },
   },
   created() {},
 };
@@ -173,5 +221,23 @@ $field-height: 40px;
   &--light {
     color: var(--color-3);
   }
+}
+.error-icon {
+  color: red;
+  position: absolute;
+  top: 9px;
+  left: 7px;
+  z-index: 2;
+}
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
 }
 </style>

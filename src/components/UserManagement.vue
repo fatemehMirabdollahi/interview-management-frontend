@@ -68,6 +68,7 @@
           theme="light"
           class="user-management__add-menu__input"
           v-model="newUser.name"
+          :rules="['required', 'maxLength:30']"
         />
       </div>
       <div
@@ -78,6 +79,7 @@
           theme="light"
           class="user-management__add-menu__input"
           v-model="newUser.username"
+          :rules="['required', 'maxLength:20']"
         />
       </div>
       <div
@@ -89,7 +91,10 @@
           theme="light"
           class="user-management__add-menu__input"
           type="password"
+          id="password"
           v-model="newUser.pass"
+          :rules="['required', 'passwordCheck']"
+          @change="newUser.passConf = ''"
         />
       </div>
       <div
@@ -101,6 +106,7 @@
           class="user-management__add-menu__input"
           type="password"
           v-model="newUser.passConf"
+          :rules="['required', `confirmPass`]"
         />
       </div>
       <div
@@ -141,6 +147,7 @@
             theme="light"
             class="user-management__edit-menu__input"
             v-model="selectedUser.name"
+            :rules="['required', 'maxLength:30']"
           />
         </div>
         <div
@@ -151,6 +158,7 @@
             theme="light"
             class="user-management__edit-menu__input"
             v-model="selectedUser.username"
+            :rules="['required', 'maxLength:20']"
           />
         </div>
         <div class="i-flex i-width-1-1 user-management__edit-pass">
@@ -176,6 +184,9 @@
             class="user-management__edit-menu__input"
             type="password"
             v-model="selectedUser.pass"
+            id="password"
+            :rules="['required', 'passwordCheck']"
+            @change="selectedUser.passConf = ''"
           />
         </div>
         <div
@@ -188,6 +199,7 @@
             class="user-management__edit-menu__input"
             type="password"
             v-model="selectedUser.passConf"
+            :rules="['required', `confirmPass`]"
           />
         </div>
       </div>

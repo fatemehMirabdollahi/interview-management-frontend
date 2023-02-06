@@ -32,7 +32,10 @@
     "vue3-jalali-moment": "^3.0.1",
     "vue3-persian-datetime-picker": "^1.2.2",
     "vuex": "^4.0.0-alpha.1",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "vee-validate": "^4.5.10",
+    "@vee-validate/rules": "^4.5.10"
+
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.13",

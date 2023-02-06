@@ -91,10 +91,12 @@
               style="flex: 4"
             >
               <Input
-                type="text"
+                type="number"
                 theme="contrast"
-                style="max-width: 50px"
+                style="max-width: 60px"
                 v-model="row.max"
+                :id="`max_1${index}`"
+                :rules="['integer']"
               />
             </div>
             <div
@@ -105,32 +107,49 @@
                 type="text"
                 theme="contrast"
                 style="max-width: 200px"
-                v-model="row.desc"
+                v-model="row.how"
               />
             </div>
             <div
               class="i-flex i-flex-align-center i-flex-justify-center"
               style="flex: 4"
+              :style="[index == 0 ? 'flex-direction: column' : '']"
             >
               <Input
-                type="text"
+                type="number"
                 theme="contrast"
-                style="max-width: 50px"
+                style="max-width: 60px"
                 v-model="row.grade[0]"
+                id="first"
+                :rules="['integer', `checkMax:max_1${index}`]"
+                v-if="index != 0"
+              />
+              <Input
+                type="number"
+                theme="contrast"
+                style="max-width: 60px"
+                v-model="row.grade[0]"
+                id="first"
+                :rules="['integer', `checkSumMax:max_1${index}`]"
+                v-if="index == 0"
               />
               <Input
                 v-if="index == 0"
-                type="text"
+                type="number"
                 theme="contrast"
-                style="max-width: 50px"
+                style="max-width: 60px"
+                id="second"
                 v-model="row.grade[1]"
+                :rules="['integer', `checkSumMax:max_1${index}`]"
               />
               <Input
                 v-if="index == 0"
-                type="text"
+                type="number"
                 theme="contrast"
-                style="max-width: 50px"
+                style="max-width: 60px"
+                id="third"
                 v-model="row.grade[2]"
+                :rules="['integer', `checkSumMax:max_1${index}`]"
               />
             </div>
           </div>
@@ -198,10 +217,12 @@
               style="flex: 4"
             >
               <Input
-                type="text"
+                type="number"
                 theme="contrast"
-                style="max-width: 50px"
+                style="max-width: 60px"
                 v-model="row.max"
+                :id="`max_2${index}`"
+                :rules="['integer']"
               />
             </div>
             <div
@@ -220,10 +241,11 @@
               style="flex: 4"
             >
               <Input
-                type="text"
+                type="number"
                 theme="contrast"
-                style="max-width: 50px"
+                style="max-width: 60px"
                 v-model="row.grade[0]"
+                :rules="['integer', `checkMax:max_2${index}`]"
               />
             </div>
           </div>
@@ -302,7 +324,6 @@ export default {
       let sum = 0;
       for (let index = 0; index < this.form_1.length; index++) {
         const element = this.form_1[index].grade;
-        console.log(element);
         sum += element.reduce((accumulator, object) => {
           return accumulator + Number(object);
         }, 0);
@@ -333,7 +354,6 @@ export default {
       this.showForm = true;
       this.selectedDocnumber = docnumber;
       this.$axios.get(`/assessment/student/${docnumber}`).then((res) => {
-        console.log(res);
         let form1 = res.data.filter((el) => el.formnum == 1);
         let form2 = res.data.filter((el) => el.formnum == 2);
         for (let index = 0; index < this.form1_titles.length; index++) {
@@ -414,14 +434,12 @@ export default {
       fields = fields.filter((el) => {
         return el.max !== "" && el.grade.indexOf(null) == -1;
       });
-      console.log(fields);
       if (fields.length)
         this.$axios
           .post(`/assessment/student/${this.selectedDocnumber}`, {
             fields,
           })
-          .then((res) => {
-            console.log(res);
+          .then(() => {
             this.form_1 = [];
             this.form_2 = [];
           });

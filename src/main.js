@@ -12,8 +12,9 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 /* import specific icons */
 import { faUserSecret } from "@fortawesome/free-solid-svg-icons";
 import "bootstrap-icons/font/bootstrap-icons.css";
-
+import "./services/validation";
 /* add icons to the library */
+
 library.add(faUserSecret);
 /* import font awesome icon component */
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";

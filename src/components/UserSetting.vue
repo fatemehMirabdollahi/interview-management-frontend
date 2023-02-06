@@ -9,10 +9,18 @@
       </div>
       <div class="i-flex i-flex-column" style="width: 50%">
         <div class="i-flex user-setting__input">
-          <field-text-input v-model="name" label="نام و نام خانوادگی" />
+          <field-text-input
+            v-model="name"
+            label="نام و نام خانوادگی"
+            :rules="['required', 'maxLength:30']"
+          />
         </div>
         <div class="i-flex user-setting__input">
-          <field-text-input v-model="username" label="نام کاربری" />
+          <field-text-input
+            v-model="username"
+            label="نام کاربری"
+            :rules="['required', 'maxLength:20']"
+          />
         </div>
         <span
           data-bs-toggle="collapse"
@@ -25,15 +33,28 @@
         </span>
         <div class="collapse multi-collapse" id="passChange">
           <div class="i-flex user-setting__input">
-            <field-text-input v-model="oldPass" label="رمز عبور کنونی" />
-          </div>
-          <div class="i-flex user-setting__input">
-            <field-text-input v-model="newPass" label="رمز عبور جدید" />
+            <field-text-input
+              :rules="['required']"
+              v-model="oldPass"
+              label="رمز عبور کنونی"
+            />
           </div>
           <div class="i-flex user-setting__input">
             <field-text-input
+              v-model="newPass"
+              id="password"
+              type="password"
+              label="رمز عبور جدید"
+              :rules="['required', 'passwordCheck']"
+              @change="newPassConf = ''"
+            />
+          </div>
+          <div class="i-flex user-setting__input">
+            <field-text-input
+              type="password"
               v-model="newPassConf"
               label="تکرار رمز عبور جدید"
+              :rules="['required', `confirmPass`]"
             />
           </div>
         </div>
