@@ -10,13 +10,18 @@
         <div class="i-flex i-flex-align-center" style="flex: 5">
           نام خانوادگی
         </div>
-        <div class="i-flex i-flex-align-center" style="flex: 2">قبولی</div>
+        <div class="i-flex i-flex-align-center" style="flex: 1">قبولی</div>
+        <div
+          class="i-flex i-flex-align-center i-flex-justify-center"
+          style="flex: 2"
+        >
+          نمره دهی
+        </div>
       </div>
       <div
         class="assessment__table__row i-flex"
         v-for="(row, index) in students"
         :key="index"
-        @click="openForm(row.docnumber)"
       >
         <div class="i-flex i-flex-align-center" style="flex: 2">
           {{ index + 1 }}
@@ -30,11 +35,20 @@
         <div class="i-flex i-flex-align-center" style="flex: 5">
           {{ row.lastname }}
         </div>
-        <div class="i-flex i-flex-align-center" style="flex: 2">
+        <div class="i-flex i-flex-align-center" style="flex: 1">
           <b-form-checkbox
             style="cursor: pointer"
-            v-model="row.selected"
+            v-model="row.accepted"
           ></b-form-checkbox>
+        </div>
+        <div
+          class="i-flex i-flex-align-center i-flex-justify-center"
+          style="flex: 2"
+        >
+          <i
+            class="i-flex bi bi-pencil-square edit"
+            @click="openForm(row.docnumber)"
+          />
         </div>
       </div>
     </div>
@@ -694,6 +708,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.edit {
+  cursor: pointer;
+  &:hover {
+    text-shadow: var(--highlight-color) 1px 1px 2px;
+  }
+}
 .assessment {
   &__table {
     width: 80%;
@@ -702,7 +722,6 @@ export default {
     border-radius: 8px;
     font-size: 18px;
     &__row {
-      cursor: pointer;
       padding: 0 16px;
       &--header {
         background-color: var(--color-3);
@@ -721,9 +740,9 @@ export default {
       &:nth-of-type(even) {
         background-color: var(--on-color-3);
       }
-      &:hover {
-        text-shadow: var(--highlight-color) 1px 1px 2px;
-      }
+      // &:hover {
+      //   text-shadow: var(--highlight-color) 1px 1px 2px;
+      // }
     }
   }
   &__form {

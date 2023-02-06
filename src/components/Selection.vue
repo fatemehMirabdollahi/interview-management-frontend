@@ -10,6 +10,7 @@
         <i
           class="i-flex i-flex-align-center bi bi-pencil-square"
           :style="{ color: editMode ? 'var(--color-3)' : 'var(--color-2)' }"
+          v-if="this.$store.state.isAdmin"
         />
       </div>
       <div class="i-flex i-flex-align-center selection__filter--select">

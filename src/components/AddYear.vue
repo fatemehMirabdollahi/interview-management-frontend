@@ -44,12 +44,8 @@
           style="flex: 2"
         >
           <i
-            class="i-flex bi bi-pencil-square addYear__table-icon"
-            @click="editUploaded(row.year)"
-          />
-          <i
             class="i-flex bi bi-trash3 addYear__table-icon"
-            @click="selectDelete(row.year)"
+            @click="selectDelete(row.interview_year)"
           />
         </div>
       </div>
@@ -235,6 +231,9 @@ export default {
               position: toast.POSITION.BOTTOM_LEFT,
               type: "success",
             });
+            this.$axios.get("/interview").then((result) => {
+              this.yearData = result.data;
+            });
           })
           .catch(() => {
             toast("!خطا در اعمال تغییرات", {
@@ -353,7 +352,27 @@ export default {
 
     cancelDelete() {
       this.deleteModal = false;
-      this.selected = null;
+      this.$axios
+        .delete(`/interview/${this.selected}`)
+        .then((res) => {
+          console.log(res);
+          this.selected = null;
+          toast(".تغییرات با موفقیت اعمال شد", {
+            autoClose: 2000,
+            position: toast.POSITION.BOTTOM_LEFT,
+            type: "success",
+          });
+          this.$axios.get("/interview").then((result) => {
+            this.yearData = result.data;
+          });
+        })
+        .catch(() => {
+          toast("!خطا در اعمال تغییرات", {
+            autoClose: 2000,
+            position: toast.POSITION.BOTTOM_LEFT,
+            type: "error",
+          });
+        });
     },
     confirmDelete() {
       this.cancelDelete();

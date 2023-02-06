@@ -13,6 +13,7 @@
           v-model="username"
           label="نام کاربری"
           :rules="['required']"
+          @focus="hasError = false"
         />
         <field-text-input
           class="login__form-input"
@@ -20,6 +21,7 @@
           label="رمز عبور"
           type="password"
           :rules="['required']"
+          @focus="hasError = false"
         />
         <form-button
           class="login__form-button"
@@ -27,6 +29,11 @@
           label="ورود"
           @i-click="submit"
         />
+        <div style="height: 30px">
+          <span v-show="hasError" style="font-size: 10; color: red"
+            >نام کاربری و یا رمز عبور اشتباه است</span
+          >
+        </div>
       </div>
     </div>
   </div>
@@ -44,6 +51,7 @@ export default {
     return {
       username: "",
       password: "",
+      hasError: false,
     };
   },
   methods: {
@@ -61,6 +69,9 @@ export default {
           this.$store.commit("login", res.data.username);
           localStorage.setItem("username", res.data.username);
           this.$router.push("/");
+        })
+        .catch(() => {
+          this.hasError = true;
         });
     },
   },

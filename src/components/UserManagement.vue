@@ -277,6 +277,12 @@ export default {
       this.$axios.get("/user/all").then((res) => {
         this.users = res.data;
       });
+      this.newUser = {
+        name: "",
+        username: "",
+        pass: "",
+        passConf: "",
+      };
     },
     cancelAdd() {
       this.newUser = {};

@@ -86,6 +86,11 @@ export default {
   methods: {
     closeMenu() {
       this.userMenu = false;
+      this.$axios.get("/interview/years").then((response) => {
+        this.interviewYears = response.data.map((el) => {
+          return { value: el.interview_year, text: el.interview_year };
+        });
+      });
     },
     setInterviewYear(el) {
       this.activeYear = el;

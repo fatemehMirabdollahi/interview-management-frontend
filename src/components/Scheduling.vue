@@ -46,6 +46,7 @@
           v-model="interviewLength"
           :rules="['required', 'isBetween:5,90']"
           @change="fieldChanged"
+          :disabled="!$store.state.isAdmin"
         />
       </div>
       <span class="scheduling__field-unit">دقیقه</span>
@@ -58,6 +59,7 @@
           v-model="rest"
           :rules="['required', 'isBetween:0,90']"
           @change="fieldChanged"
+          :disabled="!$store.state.isAdmin"
         />
       </div>
       <span class="scheduling__field-unit">دقیقه</span>
@@ -72,6 +74,7 @@
             v-model="startTime.minute"
             :rules="['required', 'isBetween:0,59']"
             @change="fieldChanged"
+            :disabled="!$store.state.isAdmin"
           />
         </div>
         <span class="scheduling-bold">:</span>
@@ -81,6 +84,7 @@
             v-model="startTime.hour"
             :rules="['required', 'isBetween:0,23']"
             @change="fieldChanged"
+            :disabled="!$store.state.isAdmin"
           />
         </div>
       </div>
@@ -92,6 +96,7 @@
             v-model="endTime.minute"
             :rules="['required', 'isBetween:0,59']"
             @change="fieldChanged"
+            :disabled="!$store.state.isAdmin"
           />
         </div>
         <span class="scheduling-bold">:</span>
@@ -101,6 +106,7 @@
             v-model="endTime.hour"
             :rules="['required', 'isBetween:0,23']"
             @change="fieldChanged"
+            :disabled="!$store.state.isAdmin"
           />
         </div>
       </div>
@@ -115,6 +121,7 @@
             v-model="gapStart.minute"
             :rules="['required', 'isBetween:0,59']"
             @change="fieldChanged"
+            :disabled="!$store.state.isAdmin"
           />
         </div>
         <span class="scheduling-bold">:</span>
@@ -124,6 +131,7 @@
             v-model="gapStart.hour"
             :rules="['required', 'isBetween:0,23']"
             @change="fieldChanged"
+            :disabled="!$store.state.isAdmin"
           />
         </div>
       </div>
@@ -135,6 +143,7 @@
             v-model="gapEnd.minute"
             :rules="['required', 'isBetween:0,59']"
             @change="fieldChanged"
+            :disabled="!$store.state.isAdmin"
           />
         </div>
         <span class="scheduling-bold">:</span>
@@ -144,6 +153,7 @@
             v-model="gapEnd.hour"
             :rules="['required', 'isBetween:0,23']"
             @change="fieldChanged"
+            :disabled="!$store.state.isAdmin"
           />
         </div>
       </div>
@@ -155,7 +165,9 @@
         label="زمانبندی"
         :size="{ width: 100, height: 40 }"
         @i-click="schedule"
-        :disable="students.length == 0 || dates.length == 0"
+        :disable="
+          students.length == 0 || dates.length == 0 || !$store.state.isAdmin
+        "
       />
       <form-button
         label="نمایش تقویم مصاحبه ها"
@@ -269,6 +281,7 @@
           label="ذخیره جدول زمانبندی"
           :size="{ width: 200, height: 40 }"
           @i-click="saveCalender"
+          :disable="!$store.state.isAdmin"
         />
       </div>
     </div>
