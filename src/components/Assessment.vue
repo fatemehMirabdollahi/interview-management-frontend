@@ -62,7 +62,7 @@
       <div class="i-flex-column i-width-1-1" style="position: relative">
         <i class="bi bi-file-earmark-pdf pdf-icon" @click="download"></i>
         <span class="assessment__form-header"
-          >۱) نمره سوابق آموزشی، پژوهشی و فناوری</span
+          >۱) نمره سوابق آموزشی، پژوهشی و فناوری (۲۰ نمره)</span
         >
         <span class="assessment__form-desc"
           >جدول ۱- نحوه مساحبه نمرات آموزشی، پژوهشی و فناوری</span
@@ -173,7 +173,11 @@
           >
             <div class="i-flex i-flex-align-center" style="flex: 1"></div>
             <div class="i-flex i-flex-align-center" style="flex: 7">جمع</div>
-            <div class="i-flex i-flex-align-center" style="flex: 4">
+            <div
+              class="i-flex i-flex-align-center"
+              style="flex: 4"
+              :class="{ red: maxValueSum_1 > 20 }"
+            >
               {{ maxValueSum_1 }}
             </div>
             <div class="i-flex i-flex-align-center" style="flex: 5">-</div>
@@ -185,7 +189,7 @@
       </div>
       <div class="i-flex-column i-width-1-1">
         <span class="assessment__form-header"
-          >۲) نمره مصاحبه علمی و سنجش علمی</span
+          >۲) نمره مصاحبه علمی و سنجش علمی (۳۰ نمره)</span
         >
         <span class="assessment__form-desc"
           >جدول ۲-نمره مصاحبه علمی و سنجش علمی</span
@@ -269,7 +273,11 @@
           >
             <div class="i-flex i-flex-align-center" style="flex: 1"></div>
             <div class="i-flex i-flex-align-center" style="flex: 7">جمع</div>
-            <div class="i-flex i-flex-align-center" style="flex: 4">
+            <div
+              class="i-flex i-flex-align-center"
+              style="flex: 4"
+              :class="{ red: maxValueSum_3 > 30 }"
+            >
               {{ maxValueSum_2 }}
             </div>
             <div class="i-flex i-flex-align-center" style="flex: 5">-</div>
@@ -321,8 +329,7 @@
               ><span>سوابق آموزشی، پژوهشی و فناوری (۲۰ نمره)</span>
             </div>
             <div class="print__details__item">
-              <span>۱-</span
-              ><span>سوابق آموزشی، پژوهشی و فناوری (۳۰ نمره)</span>
+              <span>۱-</span><span>مصاحبه و سنجش و عملی (۳۰ نمره)</span>
             </div>
           </div>
         </div>
@@ -677,7 +684,8 @@ export default {
       });
       if (
         fields.length &&
-        !document.getElementsByClassName("error-icon").length
+        !document.getElementsByClassName("error-icon").length &&
+        !document.getElementsByClassName("red").length
       ) {
         this.$axios
           .post(`/assessment/student/${this.selectedDocnumber}`, {
@@ -979,5 +987,8 @@ $page-width: 209mm;
     font-size: 12px;
     margin-top: 20px;
   }
+}
+.red {
+  color: red;
 }
 </style>
