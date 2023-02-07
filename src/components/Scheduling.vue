@@ -306,7 +306,6 @@
             position: relative;
           "
         >
-          <i class="report__logo bi bi-escape" />
           <span class="report__title--first">بسم تعالی</span>
           <span class="report__title--seconde"
             >زمان بندی مصاحبه های سال ۱۴۰۰</span

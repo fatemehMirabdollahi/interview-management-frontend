@@ -3,7 +3,7 @@
     class="user-management i-flex i-flex-column i-flex-align-center i-flex-justify-center"
   >
     <div class="i-flex i-flex-column">
-      <div class="i-flex user-management__add" @click="showAddMenu = true">
+      <div class="i-flex user-management__add" @click="openAdd">
         <i class="bi bi-person-plus"></i>
         <span class="i-flex i-flex-align-center">افزودن کابر جدید</span>
       </div>
@@ -337,6 +337,15 @@ export default {
     cancelEdit() {
       this.selectedUser = {};
       this.showEditMenu = false;
+    },
+    openAdd(){
+      this.showAddMenu = true
+      this.newUser = {
+        name: "",
+        username: "",
+        pass: "",
+        passConf: "",
+      };
     },
     confirmDelete() {
       this.$axios

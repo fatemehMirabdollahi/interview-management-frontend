@@ -23,7 +23,6 @@
     "click-outside-vue3": "^4.0.1",
     "core-js": "^3.6.5",
     "moment-jalaali": "^0.9.6",
-    "node-sass": "^5.0.0",
     "sass": "^1.32.6",
     "vee-validate": "^4.5.10",
     "vue": "^3.2.45",
