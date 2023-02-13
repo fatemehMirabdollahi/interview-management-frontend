@@ -153,7 +153,7 @@ export default {
   height: 100%;
   &__container {
     border: 1px solid var(--color-3);
-    width: 60%;
+    width: 70%;
     border-radius: 10px;
     box-shadow: 5px 5px 10px 1px var(--color-3);
     height: 100%;

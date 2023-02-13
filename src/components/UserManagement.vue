@@ -410,6 +410,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .user-management {
   width: 100%;
   &__add {
